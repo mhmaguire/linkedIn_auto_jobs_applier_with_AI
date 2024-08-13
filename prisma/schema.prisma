@@ -1,0 +1,54 @@
+// database
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// generator
+generator client {
+    provider             = "prisma-client-py"
+    recursive_type_depth = 5
+}
+
+model Job {
+    id                        String  @id @default(uuid())
+    external_id               String  @unique
+    title                     String?
+    location                  String?
+    link                      String?
+    apply_method              String?
+    description               String?
+    summarize_job_description String?
+
+    company   Company? @relation(fields: [company_id], references: [id])
+    company_id String?
+
+    poster   User?    @relation(fields: [poster_id], references: [id])
+    poster_id String?
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@map("jobs")
+}
+
+model Company {
+    id          String @id @default(uuid())
+    link        String @unique
+    name        String?
+    description String?
+
+    jobs Job[]
+
+    @@map("companies")
+}
+
+model User {
+    id          String @id @default(uuid())
+    link        String @unique
+    email       String? @unique
+    name        String?
+    posted_jobs Job[]
+
+    @@map("users")
+}

@@ -1,4 +1,4 @@
-class LinkedInBotFacade:
+class BotFacade:
 
     def __init__(self, login_component, apply_component):
         self.login_component = login_component

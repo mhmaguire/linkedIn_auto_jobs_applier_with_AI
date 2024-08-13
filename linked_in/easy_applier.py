@@ -16,19 +16,29 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select, WebDriverWait
 import tempfile
-import time
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-import io
-import time
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
 from xhtml2pdf import pisa
 
-import utils    
+import utils
+from page.element import Element
 
-class LinkedInEasyApplier:
+class CoverLetterFactory:
+    pass
+
+
+class ResumeFactory:
+    pass
+
+
+class QAResponseFactory:
+    pass
+
+
+class ApplicationForm:
+    next_button = Element.one((By.CLASS_NAME, "artdeco-button--primary"))
+    pass
+
+
+class EasyApplier:
     def __init__(self, driver: Any, resume_dir: Optional[str], set_old_answers: List[Tuple[str, str, str]], gpt_answerer: Any):
         if resume_dir is None or not os.path.exists(resume_dir):
             resume_dir = None
@@ -51,6 +61,16 @@ class LinkedInEasyApplier:
             tb_str = traceback.format_exc()
             self._discard_application()
             raise Exception(f"Failed to apply to job! Original exception: \nTraceback:\n{tb_str}")
+
+
+    def fill_up(self) -> None:
+        try:
+            easy_apply_content = self.driver.find_element(By.CLASS_NAME, 'jobs-easy-apply-content')
+            pb4_elements = easy_apply_content.find_elements(By.CLASS_NAME, 'pb4')
+            for element in pb4_elements:
+                self._process_form_element(element)
+        except Exception as e:
+            pass
 
 
     def _find_easy_apply_button(self) -> WebElement:
@@ -110,7 +130,6 @@ class LinkedInEasyApplier:
         time.sleep(random.uniform(3.0, 5.0))
         self._check_for_errors()
 
-
     def _unfollow_company(self) -> None:
         try:
             follow_checkbox = self.driver.find_element(
@@ -132,18 +151,7 @@ class LinkedInEasyApplier:
             time.sleep(random.uniform(3, 5))
         except Exception as e:
             pass
-
-    def fill_up(self) -> None:
-        try:
-            easy_apply_content = self.driver.find_element(By.CLASS_NAME, 'jobs-easy-apply-content')
-            pb4_elements = easy_apply_content.find_elements(By.CLASS_NAME, 'pb4')
-            for element in pb4_elements:
-                self._process_form_element(element)
-        except Exception as e:
-            pass
         
-
-
     def _process_form_element(self, element: WebElement) -> None:
         try:
             if self._is_upload_field(element):
@@ -227,6 +235,8 @@ class LinkedInEasyApplier:
         for section in form_sections:
             self._process_question(section)
 
+
+
     def _process_question(self, section: WebElement) -> None:
         if self._handle_terms_of_service(section):
             return
@@ -308,6 +318,9 @@ class LinkedInEasyApplier:
             self._select_dropdown(dropdown, answer)
         except Exception:
             pass
+
+
+
 
     def _get_answer_from_set(self, question_type: str, question_text: str, options: Optional[List[str]] = None) -> Optional[str]:
         for entry in self.set_old_answers:

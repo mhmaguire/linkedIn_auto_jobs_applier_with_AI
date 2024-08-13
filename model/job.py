@@ -1,5 +1,22 @@
 from dataclasses import dataclass
 
+##
+#
+# coordinate construction of a job summary by calling gpt
+#
+class JobSummaryFactory():
+    pass
+
+
+##
+# Job Application Consist of
+# - The posting
+# - The resume context relevant to the posting
+# - The Cover Letter
+# - Any Pre Application Questions + Answers
+##
+
+
 @dataclass
 class Job:
     title: str
