@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import os
 import random
 import time
@@ -8,6 +9,8 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException
+
+from selenium.webdriver.common.utils import free_port
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -24,7 +27,7 @@ def browser_options(headless=False):
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--remote-debugging-port=9222")
+    # options.add_argument("--remote-debugging-port=9222")
     options.add_argument("--auto-open-devtools-for-tabs")
     if headless:
         options.add_argument("--headless=new")
@@ -34,16 +37,29 @@ def browser_options(headless=False):
     options.add_experimental_option("useAutomationExtension", False)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
-    options.add_argument("--user-data-dir=" + str(CHROME_PROFILE_PATH.parent))
-    options.add_argument("--profile-directory=" + str(CHROME_PROFILE_PATH.name))
+    # options.add_argument("--user-data-dir=" + str(CHROME_PROFILE_PATH.parent))
+    # options.add_argument("--profile-directory=" + str(CHROME_PROFILE_PATH.name))
 
     return options
 
 
-def browser(headless=False):
+def init_browser(headless=False):
     options = browser_options(headless)
-    service = ChromeService(ChromeDriverManager().install())
-    return webdriver.Chrome(service=service, options=options)
+    driver_path = ChromeDriverManager().install()
+    service = ChromeService(port=free_port(), executable_path=driver_path)
+    driver = webdriver.Chrome(service=service, options=options)
+    return driver
+
+@contextmanager
+def browser(**kwargs):
+    try:
+        print('entering browser')
+        browser = init_browser(**kwargs)
+        yield browser
+    finally:
+        print('leaving browser')
+        # browser.close()
+    
 
 
 def local_file(path: Path):
@@ -55,38 +71,35 @@ def html_to_pdf(path: Path, timeout=2):
     if not path.is_file():
         raise FileNotFoundError(f"The specified file does not exist: {path}")
 
-    driver = browser(headless=True)
-    driver.get(local_file(path))
+    with browser(headless=True) as driver:
+    
+        driver.get(local_file(path))
 
-    try:
-        WebDriverWait(driver, timeout).until(
-            EC.staleness_of(driver.find_element(by=By.TAG_NAME, value="html"))
-        )
-    except TimeoutException:
-        pdf_base64 = driver.execute_cdp_cmd(
-            "Page.printToPDF",
-            {
-                "printBackground": True,
-                "landscape": False,
-                "paperWidth": 10,
-                "paperHeight": 11,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "marginLeft": 0,
-                "marginRight": 0,
-                "displayHeaderFooter": False,
-                "preferCSSPageSize": True,
-                "generateDocumentOutline": False,
-                "generateTaggedPDF": False,
-                "transferMode": "ReturnAsBase64",
-            },
-        )
+        try:
+            WebDriverWait(driver, timeout).until(
+                EC.staleness_of(driver.find_element(by=By.TAG_NAME, value="html"))
+            )
+        except TimeoutException:
+            pdf_base64 = driver.execute_cdp_cmd(
+                "Page.printToPDF",
+                {
+                    "printBackground": True,
+                    "landscape": False,
+                    "paperWidth": 10,
+                    "paperHeight": 11,
+                    "marginTop": 0,
+                    "marginBottom": 0,
+                    "marginLeft": 0,
+                    "marginRight": 0,
+                    "displayHeaderFooter": False,
+                    "preferCSSPageSize": True,
+                    "generateDocumentOutline": False,
+                    "generateTaggedPDF": False,
+                    "transferMode": "ReturnAsBase64",
+                },
+            )
 
-        return base64.b64decode(pdf_base64["data"])
-
-    finally:
-        # Ensure the driver is closed
-        driver.quit()
+            return base64.b64decode(pdf_base64["data"])
 
 
 def is_scrollable(element):

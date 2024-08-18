@@ -4,6 +4,7 @@ from itertools import product
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.actions.wheel_input import ScrollOrigin
+from selenium.common.exceptions import NoSuchElementException
 
 from page.page import Page
 from page.element import Element
@@ -56,6 +57,7 @@ class JobSearchPage(Page):
     no_jobs_element = Element.one((By.CLASS_NAME, 'jobs-search-two-pane__no-results-banner--expand'))
     results = Element.one((By.CLASS_NAME, "jobs-search-results-list"))
     jobs = Element.many((By.CSS_SELECTOR, '[data-job-id]'))
+    pagination = Element.one((By.CLASS_NAME, 'jobs-search-results-list__pagination'))
 
     def __init__(self, driver):
         super().__init__(driver)
@@ -118,6 +120,8 @@ class JobScraper(Page):
 
         results = page.wait_for(page.results.visible())
         print('results visible')
+        page.wait_for(page.pagination.present())
+        print('pagination visible')
         print('is scrolled', page.scrolled_bottom())
 
         while not page.scrolled_bottom():
@@ -125,6 +129,7 @@ class JobScraper(Page):
             page.scroll(results, 1000)
             time.sleep(random.uniform(1.0, 2.6))
 
+        print('scrolled')
         return [job.get_attribute('data-job-id') for job in page.jobs()]
                     
 
@@ -154,11 +159,12 @@ class JobPage(Page):
     more_description = Element.one((By.CSS_SELECTOR, '.jobs-description footer button'))
     salary = Element.one((By.CSS_SELECTOR, '#SALARY'))
 
-    company = Element.one((By.CSS_SELECTOR, 'a[href*="/company"]'))
-    company_description = Element.one((By.CSS_SELECTOR, '.jobs-company__company-description'))
+    company_el = Element.one((By.CLASS_NAME, 'job-details-jobs-unified-top-card__company-name'))
+    company_link_el = Element.one((By.CSS_SELECTOR, '.job-details-jobs-unified-top-card__company-name a'))
+    company_description_el = Element.one((By.CSS_SELECTOR, '.jobs-company__company-description'))
 
-    poster = Element.one((By.CSS_SELECTOR, 'a:has(+ .hirer-card__hirer-information)'))
-    poster_name = Element.one((By.CSS_SELECTOR, '.hirer-card__hirer-information .jobs-poster__name strong'))
+    poster_el = Element.one((By.CSS_SELECTOR, 'a:has(+ .hirer-card__hirer-information)'))
+    poster_name_el = Element.one((By.CSS_SELECTOR, '.hirer-card__hirer-information .jobs-poster__name strong'))
     
 
     def __init__(self, driver=None, job_id=None):
@@ -172,24 +178,73 @@ class JobPage(Page):
     def go(self):
         self.driver.get(self.link())
 
+
+    @property
+    def poster(self):
+        
+        poster = dict(link=self.poster_link, name=self.poster_name)
+
+        if poster.get('name', False) and poster.get('link', False):
+            return poster
+        else:
+            return None
+
+
+    @property
+    def poster_link(self):
+        try:
+            return self.poster_el().get_attribute('href')
+        except NoSuchElementException:
+            return None
+
+    @property
+    def poster_name(self):
+        try:
+            return self.poster_name_el().text
+        except NoSuchElementException:
+            return None
+
+    @property
+    def company_link(self):
+        try:
+            return self.company_link_el().get_attribute('href')
+        except NoSuchElementException:
+            return None
+
+    @property
+    def company(self):
+        try:
+            return self.company_el().text
+        except NoSuchElementException:
+            return None
+
+    @property
+    def company_description(self):
+        try:
+            self.company_description_el().text
+        except NoSuchElementException:
+            return None
+
+
     def data(self):
 
-        self.more_description().click()
-
-        try: 
-            poster = dict(link=self.poster().get_attribute('href'), name=self.poster_name().text)
-        except: 
-            poster = None
+        self.expand_description()
         
         return dict(
             title=self.title().text,
             details=' '.join([el.text for el in self.details()]),
             highlights=' '.join([el.text for el in self.highlights()]),
             description=self.description().text,
-            company=dict(name=self.company().text, link=self.company().get_attribute('href'), description=self.company_description().text),
-            poster=poster,
+            company=dict(name=self.company, link=self.company_link, description=self.company_description),
+            poster=self.poster,
             link=self.link()
         )
+
+    def expand_description(self):
+        try:
+            self.more_description().click()
+        except NoSuchElementException:
+            pass
 
     @classmethod
     def extract(cls, driver, job_id):

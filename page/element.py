@@ -14,9 +14,9 @@ class Element:
 
     def __call__(self, instance, timeout=1):
         if self.is_many:
-            return instance.driver.find_elements(*self.locator, timeout=timeout)
+            return instance.driver.find_elements(*self.locator)
         else:
-            return instance.driver.find_element(*self.locator, timeout=timeout)
+            return instance.driver.find_element(*self.locator)
 
     def __get__(self, instance, owner):
         if instance is None:

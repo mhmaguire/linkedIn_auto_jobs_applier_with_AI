@@ -39,7 +39,7 @@ class SummarizeJob:
         self.llm = ChatOpenAI(model="gpt-4o-mini")
         self.chain = (
             ChatPromptTemplate.from_template(textwrap.dedent(summarize_prompt_template))
-            | self.self.llm
+            | self.llm
             | StrOutputParser()
         )
 

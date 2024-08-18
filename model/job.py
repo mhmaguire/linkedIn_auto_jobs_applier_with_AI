@@ -1,50 +1,72 @@
+from typing import ClassVar
+from prisma.partials import JobWithCompany as JobBase
+
 from dataclasses import dataclass
 
-##
-#
-# coordinate construction of a job summary by calling gpt
-#
-class JobSummaryFactory():
-    pass
+from agent.summarize import SummarizeJob
 
+class Job(JobBase):
 
-##
-# Job Application Consist of
-# - The posting
-# - The resume context relevant to the posting
-# - The Cover Letter
-# - Any Pre Application Questions + Answers
-##
+    summarizer: ClassVar = SummarizeJob()
 
+    @classmethod
+    async def upsert(cls, job_id: str, data: dict):
+        poster = data.get("poster")
+        company = data.get("company")
+        payload = {
+            "title": data.get("title"),
+            "description": data.get("description"),
+            "link": data.get("link"),
+        }
 
-@dataclass
-class Job:
-    title: str
-    company: str
-    location: str
-    link: str
-    apply_method: str
-    description: str = ""
-    summarize_job_description: str = ""
+        if company:
+            payload["company"] = {
+                "connectOrCreate": {
+                    "where": {"name": company.get("name")},
+                    "create": company,
+                }
+            }
 
-    def set_summarize_job_description(self, summarize_job_description):
-        self.summarize_job_description = summarize_job_description
+        if poster:
+            payload["poster"] = {
+                "connectOrCreate": {
+                    "where": {"link": poster.get("link")},
+                    "create": poster,
+                }
+            }
+            
+        return await cls.prisma().upsert(
+            where={'external_id': job_id},
+            data={
+                'create': { 'external_id': job_id, **payload },
+                'update': payload
+            },
+            include={'company': True}
+        )
+        
 
-    def set_job_description(self, description):
-        self.description = description
+    async def summarize(self):
+        summary = self.summarizer(self.info)
 
-    def formatted_job_information(self):
+        await self.prisma().update(
+            where={'id': self.id},
+            data={
+                'summary': summary
+            }
+        )
+
+    @property
+    def info(self):
         """
         Formats the job information as a markdown string.
         """
-        job_information = f"""
+        
+        return f"""
         # Job Description
         ## Job Information 
         - Position: {self.title}
-        - At: {self.company}
-        - Location: {self.location}
+        - At: {self.company.name}
         
         ## Description
         {self.description or 'No description provided.'}
-        """
-        return job_information.strip()
+        """.strip()

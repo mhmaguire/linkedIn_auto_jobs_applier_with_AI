@@ -12,14 +12,17 @@ class Authenticator(Page):
     password_field = Element.one((By.ID, "password"))
     submit_button = Element.one((By.XPATH, '//button[@type="submit"]'))
     
-    def __init__(self, driver=None):
+    def __init__(self, driver=None, config=None):
         self.driver = driver
-        self.email = ""
-        self.password = ""
+        self.config = config
 
-    def set_secrets(self, email, password):
-        self.email = email
-        self.password = password
+    @property
+    def email(self):
+        return self.config.secrets.email
+
+    @property
+    def password(self):
+        return self.config.secrets.password
 
     def start(self):
         """Start the Chrome browser and attempt to log in to LinkedIn."""

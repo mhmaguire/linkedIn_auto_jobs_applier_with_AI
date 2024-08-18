@@ -14,11 +14,10 @@ model Job {
     id                        String  @id @default(uuid())
     external_id               String  @unique
     title                     String?
-    location                  String?
     link                      String?
     apply_method              String?
     description               String?
-    summarize_job_description String?
+    summary                   String?
 
     company   Company? @relation(fields: [company_id], references: [id])
     company_id String?
@@ -34,8 +33,8 @@ model Job {
 
 model Company {
     id          String @id @default(uuid())
-    link        String @unique
-    name        String?
+    name        String @unique
+    link        String?
     description String?
 
     jobs Job[]
