@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from model.context import AppContext
+from auto_resume.model.context import AppContext
 
 class Task(ABC):
     ctx: AppContext

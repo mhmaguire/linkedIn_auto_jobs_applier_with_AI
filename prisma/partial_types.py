@@ -6,6 +6,8 @@ Job.create_partial(
     include={
         "id",
         "company",
+        "company_id",
+        "resumes",
         "external_id",
         "title",
         "link",

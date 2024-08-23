@@ -2,8 +2,8 @@ from multiprocessing import Process
 import asyncio
 import click
 
-from task import Task, FetchJobs, IndexJobs
-from model.context import app
+from auto_resume.task import Task, FetchJobs, IndexJobs
+from auto_resume.model.context import app
 
 
 async def run(cmd: Task):
@@ -21,10 +21,11 @@ def fetch():
     print("fetch")
 
     def runner(task):
-        asyncio.run(run(task()))
+        asyncio.run(run(task))
 
     Process(target=runner, args=(IndexJobs,)).start()
-    Process(target=runner, args=(FetchJobs,)).start()
+    for _ in range(3):
+        Process(target=runner, args=(FetchJobs,)).start()
 
 
 @main.command()

@@ -28,6 +28,8 @@ model Job {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
 
+    resumes       Resume[]
+
     @@map("jobs")
 }
 
@@ -50,4 +52,30 @@ model User {
     posted_jobs Job[]
 
     @@map("users")
+}
+
+model CoverLetter {
+    id          String   @id @default(uuid())
+    content     String
+    resume      Resume   @relation(fields: [resume_id], references: [id])
+    resume_id   String
+
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+
+    @@map("cover_letters")
+}
+
+model Resume {
+    id          String   @id @default(uuid())
+    content     String
+    job         Job      @relation(fields: [job_id], references: [id])
+    job_id      String
+
+    cover_letters CoverLetter[]
+
+    created_at  DateTime @default(now())
+    updated_at  DateTime @updatedAt
+
+    @@map("resumes")
 }

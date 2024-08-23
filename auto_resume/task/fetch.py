@@ -1,11 +1,11 @@
 import asyncio
 from itertools import islice
 from traceback import print_exception
-from linked_in.job_search import JobScraper, JobPage
-from linked_in.authenticator import Authenticator
-from model.job import Job
-from task import Task
-from page.util import browser
+from auto_resume.linked_in.job_search import JobScraper, JobPage
+from auto_resume.linked_in.authenticator import Authenticator
+from auto_resume.model.job import Job
+from auto_resume.task import Task
+from auto_resume.page.util import browser
 
 import zmq
 from zmq.asyncio import Context

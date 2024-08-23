@@ -1,0 +1,115 @@
+{% extends 'layout.html.j2' %}
+
+{% block title %} Matt's Auto Resume -- Resume {% endblock %}
+
+{% block content %}
+
+<header class="subheader">
+    <nav class="ctx-nav">
+        <a href="{{url_for('jobs')}}"> <- Jobs Index </a>
+        <a href="{{url_for('job', job_id=resume.job.id)}}"> <- Back to Job </a>
+    </nav>
+</header>
+
+<div class="resume">
+
+    {% with %}
+        {% set job = resume.job%}
+
+        <div class="resume--header job--peek">
+            <div class="company--link">
+                <a href="{{job.company.link}}"> 
+                    {{ job.company.name }} 
+                </a>
+            </div>
+            <div class="job--link"> 
+                <a href="{{job.link}}"> {{ job.title }}</a>
+            </div>
+
+            <span> {{job.created_at}} </span>
+            <span> {{job.updated_at}} </span>
+            
+        </div>
+
+    {% endwith %}
+
+
+    
+    
+
+    <div class="resume--cover-letter">
+    <form id="resume_action" name="resume_action" style="display: none;"> </form>
+        <h2>Cover Letter</h2>
+        <p>
+            {% if resume.cover_letters %}
+                {% for cover_letter in resume.cover_letters %}
+                    {% markdown %}
+                    {{ cover_letter.content }}
+                    {% endmarkdown %}
+                {% endfor %}
+            {% else %}
+                <em>No cover letter available for this resume.</em>
+                <button 
+                    form="resume_action" 
+                    formmethod="post" 
+                    formaction="{{url_for('cover_letter', resume_id=resume.id)}}">
+                    Generate Cover Letter
+                </button>
+                
+            {% endif %}
+        </p>
+    </div>
+
+    <div class="resume--summary">
+        <p>
+            {% markdown %}
+            {{ resume.content }}
+            {% endmarkdown %}
+        </p>
+    </div>
+
+    {#<div class="resume--skills">
+        <h2>Skills</h2>
+        <ul>
+            {% for skill in resume.skills %}
+                <li><strong>{{ skill.name }}:</strong> {{ skill.details }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="resume--experience">
+        <h2>Work Experience</h2>
+        <ul>
+            {% for experience in resume.experience %}
+                <li>
+                    <h3>{{ experience.position }} at {{ experience.company }}</h3>
+                    <p>{{ experience.start_date }} - {{ experience.end_date }}</p>
+                    <p>{{ experience.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="resume--education">
+        <h2>Education</h2>
+        <ul>
+            {% for education in resume.education %}
+                <li>
+                    <h3>{{ education.degree }} in {{ education.field }} from {{ education.institution }}</h3>
+                    <p>{{ education.start_date }} - {{ education.end_date }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="resume--certifications">
+        <h2>Certifications</h2>
+        <ul>
+            {% for certification in resume.certifications %}
+                <li>{{ certification.name }} - {{ certification.issuer }}</li>
+            {% endfor %}
+        </ul>
+    </div> #}
+</div>
+
+{% endblock %}

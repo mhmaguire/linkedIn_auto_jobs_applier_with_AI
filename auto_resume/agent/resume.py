@@ -1,22 +1,16 @@
-from pathlib import Path
-import uuid
-import base64
-import tempfile
-import time
-import os
-
+from __future__ import annotations
+from operator import itemgetter
+from traceback import format_exception, print_exception
 from dotenv import load_dotenv
-
-import agent.prompt as prompts
 
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-from model.render import PdfRenderer
-from model.job import Job
-from model.resume import Resume
+import auto_resume.agent.prompt as prompts
+# from auto_resume.model.job import Job
+from auto_resume.model.resume import MasterResume
 
 load_dotenv()
 
@@ -24,7 +18,6 @@ load_dotenv()
 class ResumeReviewer:
     def __init__(self, model="gpt-4o-mini") -> None:
         self.llm = ChatOpenAI(model=model)
-        self.renderer = PdfRenderer()
 
         self.resume_markdown_chain = (
             ChatPromptTemplate.from_template(RESUME_TEMPLATE)
@@ -37,23 +30,24 @@ class ResumeReviewer:
             | StrOutputParser()
         )
 
-        self.chain = (
-            RunnablePassthrough()
-            | self.resume_markdown_chain
+        self.chain = ({
+                'formatted_resume': itemgetter('resume') | self.resume_markdown_chain,
+                'job_description': itemgetter('job_description')
+            }
             | self.fusion_job_description_resume_chain
+            | StrOutputParser()
         )
 
-    def __call__(self, resume: Resume, job: Job):
+    def __call__(self, resume: MasterResume, job: 'Job'):
         try:
             output = self.chain.invoke(
-                {"resume": resume, "job_description": job.summarize_job_description}
+                {"resume": resume, "job_description": job.summary}
             )
-
-            self.renderer(output)
 
             return output
         except Exception as e:
-            # print(f"Error during elaboration: {e}")
+            print(f"Error during elaboration: {e}")
+            print_exception(e)
             pass
 
 

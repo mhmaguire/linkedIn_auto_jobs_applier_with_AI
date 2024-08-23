@@ -2,7 +2,7 @@ import uuid
 import tempfile
 from pathlib import Path
 
-from page.util import html_to_pdf
+from auto_resume.page.util import html_to_pdf
 
 
 html_template = """

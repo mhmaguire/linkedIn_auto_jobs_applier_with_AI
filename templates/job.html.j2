@@ -1,0 +1,65 @@
+{% extends 'layout.html.j2'%}
+
+{% block title %} Matt's Auto Resume -- Job {% endblock %}
+
+{% block content %}
+
+<header class="subheader">
+    <nav class="ctx-nav">
+        <a href="{{url_for('jobs')}}"> <- Jobs Index </a>
+        
+        <form id="job_action" name="job_action" style="display: none;"> </form>
+
+
+        <button form="job_action" formmethod="post" formaction="{{url_for('summarize', job_id=job.id)}}"> Summarize </button>
+        <button form="job_action" formmethod="post" formaction="{{url_for('resume', job_id=job.id)}}"> Resume </button>
+    </nav>
+</header>
+
+
+<div class="job">
+    <div class="job--title">
+        <a href="{{job.link}}"> {{job.title}} </a>
+    </div>
+
+    <div class="job--company company--link"> 
+        <a href="{{job.company.link}}"> {{job.company.name}} </a>
+    </div>
+
+        <div class="job--resumes">
+        <h3> Resumes </h3>
+        {% if job.resumes %}
+            <ul>
+                {% for resume in job.resumes %}
+                    <li>
+                        <a href="{{ url_for('show_resume', job_id=job.id, resume_id=resume.id) }}">Resume created on {{ resume.created_at.strftime('%Y-%m-%d') }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p> No resumes available. </p>
+        {% endif %}
+    </div>
+
+    <div class="job--commpany company"> 
+        {% if job.company.description %}
+            <p class="company--desc"> {{job.company.description}} </p>
+        {% else %}
+            <p> No Description </p>
+        {% endif %}
+    </div>
+
+    <div class="job--summary">
+        <h3> Summary </h3>
+        {% if job.summary %}
+            {{job.summary|md}}
+        {% endif %}
+    </div>
+
+    <div class="job--description">
+        <h3> Description </h3>
+        {{job.description}}
+    </div>
+</div>
+
+{% endblock %}

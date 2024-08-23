@@ -1,6 +1,6 @@
 import textwrap
 
-import agent.prompt as prompts
+import auto_resume.agent.prompt as prompts
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI

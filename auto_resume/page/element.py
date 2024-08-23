@@ -1,5 +1,6 @@
 import types
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 
 class Element:
@@ -12,17 +13,28 @@ class Element:
     def __set_name__(self, owner, name):
         self.__name__ = name
 
-    def __call__(self, instance, timeout=1):
-        if self.is_many:
-            return instance.driver.find_elements(*self.locator)
-        else:
-            return instance.driver.find_element(*self.locator)
+    def __call__(self, instance, timeout=10, reraise=False):
+        try: 
+            return instance.wait_for(self.present(), timeout=timeout)
+        
+        except (NoSuchElementException, TimeoutException) as e:
+            if reraise:
+                raise e
+
+            return False
+            
 
     def __get__(self, instance, owner):
         if instance is None:
             return self.locator
 
         return types.MethodType(self, instance)
+
+    def find(self, driver):
+        if self.is_many:
+            return driver.find_elements(*self.locator)
+        else:
+            return driver.find_element(*self.locator)
 
     def visible(self):
         if self.is_many:

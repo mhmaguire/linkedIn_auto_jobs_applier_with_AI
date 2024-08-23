@@ -1,0 +1,63 @@
+## Master Resume
+
+### Personal Information
+{% for attr, val in resume.personal_information.dict().items() %}
+{{attr}}: {{ val }}
+{% endfor %}
+
+### Self Identification
+{% for attr, val in resume.self_identification.dict().items() %}
+{{attr}}: {{ val }}
+{% endfor %}
+
+### Legal Authorization
+{% for attr, val in resume.legal_authorization.dict().items() %}
+{{attr}}: {{ val }}
+{% endfor %}
+
+### Work Preferences
+{% for attr, val in resume.work_preferences.dict().items() %}
+{{attr}}: {{ val }}
+{% endfor %}
+
+### Projects
+{% for label, project in resume.projects.items() %} 
+{{label}}
+{{project}}
+{% endfor %}
+
+### Availability
+{{resume.availability}}
+
+### Salary Expectations
+{{resume.salary_expectations}}
+
+### Education
+{% for education in resume.education_details %} 
+{{education}}
+{% endfor %}
+
+### Experience
+{% for experience in resume.experience_details %} 
+{{experience}}
+{% endfor %}
+
+### Certifications
+{% for certification in resume.certification %} 
+{{certification}}
+{% endfor %}
+
+### Languages
+{% for language in resume.languages %} 
+{{language.language}} -- {{language.proficiency}}
+{% endfor %}
+
+### Interests
+{% for interest in resume.interests %} 
+{{interest}}
+{% endfor %}
+
+### Skills
+{% for skill, exp in resume.skills.items() %} 
+{{skill}} -- {{exp}}
+{% endfor %}

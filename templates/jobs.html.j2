@@ -1,0 +1,12 @@
+{% extends 'layout.html.j2'%}
+
+{% block title %} Matt's Auto Resume -- Jobs {% endblock %}
+
+{% block content %}
+<ul>
+{% for job in jobs %}
+    <li> <a href="/jobs/{{job.id}}"> {{job.title}} </a> </li>
+{% endfor %}
+</ul>
+{% endblock %}
+

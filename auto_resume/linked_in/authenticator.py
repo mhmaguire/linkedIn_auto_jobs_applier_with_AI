@@ -1,8 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 
-from page.element import Element
-from page.page import Page
+from auto_resume.page.element import Element
+from auto_resume.page.page import Page
 
 
 class Authenticator(Page):

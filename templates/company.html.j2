@@ -1,0 +1,29 @@
+{% extends 'layout.html.j2'%}
+
+{% block title %} Matt's Auto Resume -- Company {% endblock %}
+
+{% block content %}
+
+<h2>Company Information</h2>
+<ul>
+    <li><strong>Name:</strong> {{ company.name }}</li>
+    <li><strong>Industry:</strong> {{ company.industry }}</li>
+    <li><strong>Location:</strong> {{ company.location }}</li>
+</ul>
+
+<h3>Job Listings</h3>
+{% if company.jobs %}
+    <ul>
+    {% for job in company.jobs %}
+        <li>
+            <h4>{{ job.title }}</h4>
+            <p><strong>Description:</strong> {{ job.description }}</p>
+            <p><strong>Link:</strong> <a href="{{ job.link }}">{{ job.link }}</a></p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No job listings available.</p>
+{% endif %}
+
+{% endblock %}

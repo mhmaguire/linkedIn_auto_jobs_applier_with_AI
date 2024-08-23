@@ -228,32 +228,6 @@ Interests: {resume_section}
 Question: {question}
 """
 
-coverletter_template = """
-The following is a resume, a job description, and an answered question using this information, being answered by the person who's resume it is (first person).
-
-## Rules
-- Answer questions directly.
-- If seems likely that you have the experience, even if is not explicitly defined, answer as if you have the experience.
-- Find relations between the job description and the resume, and answer questions about that.
-- Only add periods if the answer has multiple sentences/paragraphs.
-- If the question is "cover letter," answer with a cover letter based on job_description, but using my resume details
-
-## Job Description:
-```
-{job_description}
-```
-
-## My resume:
-```
-{resume}
-```
-
-## Question:
-{question}
-
-## """
-
-
 resume_stuff_template = """
 The following is a resume, personal data, and an answered question using this information, being answered by the person who's resume it is (first person).
 

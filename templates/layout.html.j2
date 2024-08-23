@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+</head>
+<body>
+    <header>
+    <nav class="top-nav">
+    {% block nav %}
+        <a href="{{url_for('root')}}"> master resume </a> 
+        <a href="{{url_for('jobs')}}"> jobs </a>
+    {% endblock%}
+    </nav>
+    </header>
+    <main id="content">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <div id="footer">
+        {% block footer %}
+        {% endblock %}
+    </div>
+</body>
+</html>

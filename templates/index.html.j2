@@ -1,0 +1,9 @@
+{% extends 'layout.html.j2'%}
+
+{% block title %} Matt's Auto Resume -- Home {% endblock %}
+
+{% block content %}
+<div class="resume">
+    {% markdown %} {% include 'master_resume.md.j2' %} {% endmarkdown %}
+</div>
+{% endblock %}
