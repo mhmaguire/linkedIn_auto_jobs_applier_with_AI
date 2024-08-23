@@ -13,7 +13,7 @@ class AppContext:
     async def asetup(self):
         Files.init()
         self.config = Config.load()
-        # await self.db.connect()
+        await self.db.connect()
         return self
 
     def setup(self):
@@ -27,7 +27,7 @@ class AppContext:
         
 
     async def __aenter__(self):
-        return await self.setup()
+        return await self.asetup()
 
     async def __aexit__(self):
         await self.ateardown()
