@@ -1,15 +1,12 @@
 from __future__ import annotations
 from operator import itemgetter
-from traceback import format_exception, print_exception
+from traceback import print_exception
 from dotenv import load_dotenv
 
-from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-import auto_resume.agent.prompt as prompts
-# from auto_resume.model.job import Job
 from auto_resume.model.resume import MasterResume
 
 load_dotenv()
@@ -30,19 +27,20 @@ class ResumeReviewer:
             | StrOutputParser()
         )
 
-        self.chain = ({
-                'formatted_resume': itemgetter('resume') | self.resume_markdown_chain,
-                'job_description': itemgetter('job_description')
+        self.chain = (
+            {
+                "formatted_resume": itemgetter("resume") | self.resume_markdown_chain,
+                "job_description": itemgetter("job_description"),
             }
             | self.fusion_job_description_resume_chain
             | StrOutputParser()
         )
 
-    def __call__(self, resume: MasterResume, job: 'Job'):
+    def __call__(self, resume: MasterResume, job: "Job"):
         try:
             output = self.chain.invoke(
                 {"resume": resume, "job_description": job.summary}
-            )
+            ).with_config({"run_name": self.__class__.__name__})
 
             return output
         except Exception as e:

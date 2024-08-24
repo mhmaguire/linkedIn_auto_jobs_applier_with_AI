@@ -1,11 +1,24 @@
-import textwrap
-
-import auto_resume.agent.prompt as prompts
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 
-summarize_prompt_template = """
+
+class SummarizeJob:
+    def __init__(self) -> None:
+        self.llm = ChatOpenAI(model="gpt-4o-mini")
+        self.chain = (
+            ChatPromptTemplate.from_template(SUMMARIZE_PROMPT)
+            | self.llm
+            | StrOutputParser()
+        )
+
+    def __call__(self, text: str) -> str:
+        return self.chain.with_config({"run_name": self.__class__.__name__}).invoke(
+            {"text": text}
+        )
+
+
+SUMMARIZE_PROMPT = """
 As a seasoned HR expert, your task is to identify and outline the key skills and requirements necessary for the position of this job. Use the provided job description as input to extract all relevant information. This will involve conducting a thorough analysis of the job's responsibilities and the industry standards. You should consider both the technical and soft skills needed to excel in this role. Additionally, specify any educational qualifications, certifications, or experiences that are essential. Your analysis should also reflect on the evolving nature of this role, considering future trends and how they might affect the required competencies.
 
 Rules:
@@ -32,16 +45,3 @@ This comprehensive overview will serve as a guideline for the recruitment proces
 ---
 
 # Job Description Summary"""
-
-
-class SummarizeJob:
-    def __init__(self) -> None:
-        self.llm = ChatOpenAI(model="gpt-4o-mini")
-        self.chain = (
-            ChatPromptTemplate.from_template(textwrap.dedent(summarize_prompt_template))
-            | self.llm
-            | StrOutputParser()
-        )
-
-    def __call__(self, text: str) -> str:
-        return self.chain.invoke({"text": text})
