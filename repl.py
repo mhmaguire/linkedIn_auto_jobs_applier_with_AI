@@ -13,11 +13,13 @@ c = Config()
 # class to run some code when the IPython REPL starts
 c.InteractiveShellApp.exec_lines = [
     'from selenium.webdriver.common.by import By',
-    'from auto_resume.linked_in.job_search import JobScraper, JobPage',
+    'from auto_resume.linked_in.linked_in import LinkedIn', 
+    'from auto_resume.linked_in.job_search import JobSearchPage, JobScraper, JobPage',
     'from auto_resume.model.config import Files, Config',
     'from auto_resume.model.resume import MasterResume',
     'from auto_resume.model.job import Job',
     'from auto_resume.agent import resume',
+    'from auto_resume.page import init_browser',
     'from prisma import Prisma',
     'db = Prisma(auto_register=True)',
     'await db.connect()',

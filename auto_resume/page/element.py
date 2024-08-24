@@ -42,7 +42,7 @@ class Element:
         :return: The WebElement(s) if found, otherwise False.
         """
         try:
-            return instance.driver.wait_for(self.present(), timeout=timeout)
+            return instance.wait_for(self.present(), timeout=timeout)
         except (NoSuchElementException, TimeoutException) as e:
             if reraise:
                 raise e

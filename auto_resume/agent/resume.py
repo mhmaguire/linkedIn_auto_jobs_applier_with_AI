@@ -36,7 +36,7 @@ class ResumeReviewer:
             | StrOutputParser()
         )
 
-    def __call__(self, resume: MasterResume, job: "Job"):
+    def __call__(self, resume: MasterResume, job):
         try:
             output = self.chain.invoke(
                 {"resume": resume, "job_description": job.summary}

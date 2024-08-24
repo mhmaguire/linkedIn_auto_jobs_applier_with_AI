@@ -1,16 +1,17 @@
-from selenium import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from typing import Callable, TypeVar, Union
 
 from selenium.webdriver.common.by import By
-from typing import Callable, TypeVar, Union
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class Page:
+    url: str
+    
     def __init__(self, driver: WebDriver) -> None:
         """
         Initialize the Page object with a WebDriver instance.
@@ -18,6 +19,10 @@ class Page:
         :param driver: WebDriver instance to interact with the web page.
         """
         self.driver = driver
+
+    def go(self):
+        self.driver.get(self.url)
+        return self
 
     def await_url(self, url: str) -> None:
         """
@@ -27,7 +32,9 @@ class Page:
         """
         self.wait_for(EC.url_contains(url))
 
-    def await_presence(self, locator: tuple[By, str]) -> Union[WebElement, list[WebElement]]:
+    def await_presence(
+        self, locator: tuple[By, str]
+    ) -> Union[WebElement, list[WebElement]]:
         """
         Wait until the presence of an element located by the given locator.
 

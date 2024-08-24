@@ -6,11 +6,11 @@ from prisma.partials import JobWithCompany as JobBase
 
 
 class Job(JobBase):
-    summary_factiry: ClassVar = SummaryFactory()
+    summary_factory: ClassVar = SummaryFactory()
     resume_factory: ClassVar = ResumeFactory()
 
     async def summarize(self):
-        summary = self.summarizer(self.info)
+        summary = self.summary_factory(self.info)
 
         await self.prisma().update(
             where={"id": self.id}, data={"summary": summary}, include={"company": True}
