@@ -15,21 +15,14 @@ c.InteractiveShellApp.exec_lines = [
     'from dotenv import load_dotenv',
     'load_dotenv()',
     'from langchain_community.graphs import Neo4jGraph',
-    'from selenium.webdriver.common.by import By',
     'from auto_resume.linked_in.linked_in import LinkedIn', 
-    'from auto_resume.linked_in.job_search import JobSearchPage, JobScraper, JobPage',
-    'from auto_resume.model.config import Files, Config',
-    'from auto_resume.model.resume import MasterResume',
-    'from auto_resume.model.job import Job',
-    'from auto_resume.agent import resume',
+    'import auto_resume.model as model',
     'from auto_resume.page import init_browser',
     'import prisma',
     'db = prisma.get_client()',
-    'await db.connect()',
-    'Files.init()',
-    'config = Config.load()',
-    'resume_obj = MasterResume.load(Files.plain_text_resume_file)',
-    # 'bot = Bot.configure(config, resume_obj, db)'
+    'db.connect()',
+    'model.Files.init()',
+    'config = model.Config.load()'
 ]
 c.InteractiveShell.colors = 'LightBG'
 c.InteractiveShell.confirm_exit = False

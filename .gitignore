@@ -17,3 +17,5 @@ chrome_profile
 
 node_modules
 .yarn
+record_manager_cache.sql
+generated

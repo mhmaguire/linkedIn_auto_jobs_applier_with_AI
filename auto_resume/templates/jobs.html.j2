@@ -5,7 +5,12 @@
 {% block content %}
 <ul>
 {% for job in jobs %}
-    <li> <a href="/jobs/{{job.id}}"> {{job.title}} </a> </li>
+    <li> 
+        <a href="/jobs/{{job['job'].id}}">
+             {{job['job'].title}}
+        </a>
+        {{job['score'].score}} 
+    </li>
 {% endfor %}
 </ul>
 {% endblock %}

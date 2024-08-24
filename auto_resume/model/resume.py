@@ -12,6 +12,8 @@ from auto_resume.model.render import PdfRenderer
 from prisma.models import CoverLetter as BaseCoverLetter
 from prisma.models import Resume as BaseResume
 
+from langchain_core.documents import Document
+
 
 class CoverLetter(BaseCoverLetter):
     pass
@@ -21,21 +23,21 @@ class Resume(BaseResume):
     cover_letter_factory: ClassVar = CoverLetterFactory()
 
     @classmethod
-    async def cover_letter(cls, resume_id):
-        resume = await cls.prisma().find_unique(
+    def cover_letter(cls, resume_id):
+        resume = cls.prisma().find_unique(
             where={"id": resume_id}, include={"job": True}
         )
 
         cover_letter = cls.cover_letter_factory(job=resume.job, resume=resume)
 
-        return await cls.prisma().update(
+        return cls.prisma().update(
             where={"id": resume_id},
             data={"cover_letters": {"create": {"content": cover_letter}}},
             include={"job": {"include": {"company": True}}, "cover_letters": True},
         )
 
     def to_pdf(self):
-        return PdfRenderer()(str(self))
+        return PdfRenderer()(str(self.content))
 
 
 class PersonalInformation(BaseModel):
@@ -131,7 +133,7 @@ class MasterResume(BaseModel):
     interests: List[str] = Field(..., default_factory=list, title="Interests")
     skills: Dict[str, str | int] = Field(..., description="Skills")
 
-    template: ClassVar = Path("./templates/master_resume.md.j2")
+    template: ClassVar = Path("./auto_resume/templates/master_resume.md.j2")
 
     @classmethod
     def load(cls, plain_txt_resume: Path = Files.plain_text_resume_file):
@@ -145,3 +147,8 @@ class MasterResume(BaseModel):
 
     def to_pdf(self):
         return PdfRenderer()(str(self))
+
+    def to_doc(self):
+        return Document(
+            page_content=str(self)
+        )

@@ -38,7 +38,7 @@ class IndexJobs(Task):
                     self.platform.search(driver), 2
                 ):  # only scrape the first 5 pages
                     print(job_ids)
-                    await self.db.job.create_many(
+                    self.db.job.create_many(
                         data=[{"external_id": job_id} for job_id in job_ids],
                         skip_duplicates=True,
                     )
@@ -92,6 +92,7 @@ class FetchJobs(Task):
                         data = self.platform.job(driver, job_id)
                         job = await Job.upsert(job_id, data)
                         await job.summarize()
+                        await job.index()
 
                     except ConnectionRefusedError as e:
                         print("browser has closed", e)

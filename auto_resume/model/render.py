@@ -28,7 +28,7 @@ class PdfRenderer:
 
     def __call__(self, content):
         content = self.template + content
-        outpath = self.__filepath()
+        outpath = Path.cwd() / self.__filepath()
 
         with tempfile.NamedTemporaryFile(
             suffix=".html", mode="w", encoding="utf-8"

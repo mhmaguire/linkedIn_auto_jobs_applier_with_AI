@@ -9,37 +9,43 @@ from prisma.partials import JobWithCompany as JobBase
 
 from langchain_core.documents import Document
 
+from auto_resume.model.indexer import Indexer
+
 
 class Job(JobBase):
     summary_factory: ClassVar = SummaryFactory()
     resume_factory: ClassVar = ResumeFactory()
     knowledge_factory: ClassVar = KnowledgeFactory()
     schema_factory: ClassVar = SchemaFactory()
+    indexer: ClassVar = Indexer('auto_resume_jobs')
 
     def extract_knowledge(self):
         return self.knowledge_factory([self.info])
 
     def extract_schema(self):
         return self.schema_factory(self.info)
+
+    def index(self):
+        self.indexer([self.to_doc()])
         
 
-    async def summarize(self):
+    def summarize(self):
         summary = self.summary_factory(self.info)
 
-        await self.prisma().update(
+        self.prisma().update(
             where={"id": self.id}, data={"summary": summary}, include={"company": True}
         )
 
     @classmethod
-    async def generate_resume(cls, job_id, *, master_resume):
-        job = await cls.prisma().find_unique(
+    def generate_resume(cls, job_id, *, master_resume):
+        job = cls.prisma().find_unique(
             where={"id": job_id},
             include={"resumes": {"orderBy": {"created_at": "desc"}}},
         )
 
         resume_content = cls.resume_factory(resume=master_resume, job=job)
 
-        await cls.prisma().update(
+        cls.prisma().update(
             where={ "id": job_id },
             data={"resumes": {"create": [{"content": resume_content}]}},
             include={
@@ -49,7 +55,7 @@ class Job(JobBase):
         )
 
     @classmethod
-    async def upsert(cls, job_id: str, data: dict):
+    def upsert(cls, job_id: str, data: dict):
         poster = data.get("poster")
         company = data.get("company")
         payload = {
@@ -74,7 +80,7 @@ class Job(JobBase):
                 }
             }
 
-        return await cls.prisma().upsert(
+        return cls.prisma().upsert(
             where={"external_id": job_id},
             data={"create": {"external_id": job_id, **payload}, "update": payload},
             include={"company": True},
@@ -90,6 +96,12 @@ class Job(JobBase):
         )
 
     @property
+    def company_name(self):
+        company = self.company
+        return company.name if company is not None else ''
+        
+
+    @property
     def info(self):
         """
         Formats the job information as a markdown string.
@@ -100,11 +112,8 @@ class Job(JobBase):
         ## Job Information 
         - Id: {self.id}
         - Position: {self.title}
-        - At: {self.company.name}
+        - At: {self.company_name}
 
         ## Summary
         {self.summary or 'No summary provided'}
-        
-        ## Description
-        {self.description or 'No description provided.'}
         """.strip()

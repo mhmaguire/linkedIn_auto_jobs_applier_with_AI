@@ -7,6 +7,12 @@
 <header class="subheader">
     <nav class="ctx-nav">
         <a href="{{url_for('job', job_id=resume.job.id)}}"> <- Back to Job </a>
+        <button 
+            form="resume_action" 
+            formmethod="post" 
+            formaction="{{url_for('resume_pdf', resume_id=resume.id)}}">
+            Download PDF
+        </button>
     </nav>
 </header>
 

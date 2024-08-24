@@ -13,14 +13,14 @@ class AppContext:
     async def asetup(self):
         Files.init()
         self.config = Config.load()
-        await self.db.connect()
+        self.db.connect()
         return self
 
     def setup(self):
         return asyncio.run(self.asetup())
 
     async def ateardown(self):
-        await self.db.disconnect()
+        self.db.disconnect()
 
     def teardown(self):
         asyncio.run(self.ateardown())

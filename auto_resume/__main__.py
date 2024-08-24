@@ -1,10 +1,15 @@
-from multiprocessing import Process
 import asyncio
-import click
-from auto_resume.linked_in.linked_in import LinkedIn
+from multiprocessing import Process
 
-from auto_resume.task import Task, FetchJobs, IndexJobs
+import click
+from dotenv import load_dotenv
+
+load_dotenv()
+#ruff:noqa
+from auto_resume.linked_in.linked_in import LinkedIn
 from auto_resume.model.context import app
+from auto_resume.task import FetchJobs, IndexJobs, Task
+# ruff: enable
 
 
 async def run(cmd: Task, site, *args):
@@ -39,7 +44,7 @@ def fetch():
 def serve():
     from auto_resume import app, socketio
 
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, port=3000)
 
 
 if __name__ == "__main__":
