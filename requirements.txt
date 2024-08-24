@@ -9,6 +9,7 @@ asgiref==3.8.1
 asn1crypto==1.5.1
 asttokens==2.4.1
 attrs==24.2.0
+-e git+ssh://git@github.com/mhmaguire/linkedIn_auto_jobs_applier_with_AI.git@dd93ecee8a1f27c5150b2f52c1a73a6b06b6998f#egg=auto_resume
 bidict==0.23.1
 blinker==1.8.2
 certifi==2024.7.4
@@ -40,7 +41,8 @@ jsonpatch==1.33
 jsonpointer==3.0.0
 langchain==0.2.11
 langchain-community==0.2.10
-langchain-core==0.2.24
+langchain-core==0.2.34
+langchain-experimental==0.0.64
 langchain-openai==0.1.17
 langchain-text-splitters==0.2.2
 langgraph==0.1.19
@@ -53,6 +55,7 @@ marshmallow==3.21.3
 matplotlib-inline==0.1.7
 multidict==6.0.5
 mypy-extensions==1.0.0
+neo4j==5.23.1
 nodeenv==1.9.1
 numpy==1.26.4
 openai==1.37.1
@@ -82,6 +85,7 @@ python-bidi==0.6.0
 python-dotenv==1.0.1
 python-engineio==4.9.1
 python-socketio==5.11.3
+pytz==2024.1
 PyYAML==6.0.2
 pyzmq==26.1.0
 qrcode==7.4.2

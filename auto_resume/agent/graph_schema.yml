@@ -1,0 +1,156 @@
+node_types:
+  - name: JobPosition
+    description: "A specific job role within a company"
+    attributes:
+      - name: Title
+        description: "The name of the job role (e.g., Software Engineer)"
+      - name: Department
+        description: "The department or team within the company (e.g., IT, Marketing)"
+      - name: JobID
+        description: "A unique identifier for the job posting"
+      - name: Level
+        description: "The seniority level (e.g., Entry-level, Mid-level, Senior, Manager)"
+    
+  - name: Company
+    description: "An organization that offers job positions"
+    attributes:
+      - name: Name
+        description: "The name of the company"
+      - name: Industry
+        description: "The industry sector the company operates in (e.g., Technology, Healthcare)"
+      - name: CompanySize
+        description: "The size of the company (e.g., Small, Medium, Large)"
+      - name: Website
+        description: "The company's official website URL"
+
+  - name: Location
+    description: "A geographical place where the job is located"
+    attributes:
+      - name: City
+        description: "The city where the job is located"
+      - name: StateProvince
+        description: "The state or province where the job is located"
+      - name: Country
+        description: "The country where the job is located"
+      - name: Remote
+        description: "Indicates whether the job can be done remotely"
+
+  - name: Skill
+    description: "A specific ability or expertise required for the job"
+    attributes:
+      - name: Name
+        description: "The specific skill required (e.g., Python, Project Management)"
+      - name: SkillLevel
+        description: "The required proficiency level (e.g., Beginner, Intermediate, Advanced)"
+
+  - name: Qualification
+    description: "An educational or professional credential required for the job"
+    attributes:
+      - name: DegreeType
+        description: "The level of education required (e.g., Bachelor's, Master's, PhD)"
+      - name: FieldOfStudy
+        description: "The area of study relevant to the job (e.g., Computer Science, Business)"
+
+  - name: Salary
+    description: "The compensation offered for the job"
+    attributes:
+      - name: Amount
+        description: "The monetary value of the salary"
+      - name: Currency
+        description: "The currency in which the salary is paid (e.g., USD, EUR)"
+      - name: Frequency
+        description: "The frequency of the payment (e.g., Annual, Monthly, Hourly)"
+      - name: Range
+        description: "The range of the salary if applicable (e.g., $60,000-$80,000)"
+
+  - name: EmploymentType
+    description: "The nature of the employment arrangement"
+    attributes:
+      - name: Type
+        description: "The nature of the employment (e.g., Full-time, Part-time, Contract, Temporary)"
+
+  - name: JobDescription
+    description: "A detailed description of the job role and responsibilities"
+    attributes:
+      - name: Summary
+        description: "A brief summary of the job responsibilities"
+      - name: Responsibilities
+        description: "A detailed list of job responsibilities"
+      - name: Benefits
+        description: "Any benefits offered with the job (e.g., Health insurance, 401(k), Paid time off)"
+
+  - name: Application
+    description: "The process and requirements for applying to the job"
+    attributes:
+      - name: Deadline
+        description: "The deadline for submitting an application"
+      - name: Method
+        description: "The method of application (e.g., Online form, Email)"
+      - name: Link
+        description: "A URL to the job application page"
+
+rel_types: 
+  - name: OfferedBy
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: Company
+      description: "A company entity"
+    description: "The company offering the job position"
+  - name: LocatedIn
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: Location
+      description: "A location entity"
+    description: "The location where the job is based"
+  - name: RequiresSkill
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: Skill
+      description: "A skill entity"
+    description: "The skills required for the job position"
+  - name: RequiresQualification
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: Qualification
+      description: "A qualification entity"
+    description: "The qualifications required for the job position"
+  - name: CompensatedBy
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: Salary
+      description: "A salary entity"
+    description: "The salary associated with the job position"
+  - name: HasEmploymentType
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: EmploymentType
+      description: "An employment type entity"
+    description: "The nature of the employment (e.g., full-time, part-time)"
+  - name: DescribedBy
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: JobDescription
+      description: "A job description entity"
+    description: "The job description for the position"
+  - name: AppliedThrough
+    source: 
+      name: JobApplication
+      description: "A job application entity"
+    target: 
+      name: Application
+      description: "An application entity"
+    description: "The application method or link for the job position"

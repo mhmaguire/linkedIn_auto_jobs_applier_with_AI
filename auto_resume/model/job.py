@@ -1,13 +1,27 @@
 from typing import ClassVar
-
+from auto_resume.agent.graph import (
+    ExtractKnowledge as KnowledgeFactory,
+    ExtractSchema as SchemaFactory
+)
 from auto_resume.agent.resume import ResumeReviewer as ResumeFactory
 from auto_resume.agent.summarize import SummarizeJob as SummaryFactory
 from prisma.partials import JobWithCompany as JobBase
+
+from langchain_core.documents import Document
 
 
 class Job(JobBase):
     summary_factory: ClassVar = SummaryFactory()
     resume_factory: ClassVar = ResumeFactory()
+    knowledge_factory: ClassVar = KnowledgeFactory()
+    schema_factory: ClassVar = SchemaFactory()
+
+    def extract_knowledge(self):
+        return self.knowledge_factory([self.info])
+
+    def extract_schema(self):
+        return self.schema_factory(self.info)
+        
 
     async def summarize(self):
         summary = self.summary_factory(self.info)
@@ -66,6 +80,15 @@ class Job(JobBase):
             include={"company": True},
         )
 
+
+    def to_doc(self):
+        return Document(
+            page_content=self.info,
+            metadata={
+                'source': self.id
+            }
+        )
+
     @property
     def info(self):
         """
@@ -75,8 +98,12 @@ class Job(JobBase):
         return f"""
         # Job Description
         ## Job Information 
+        - Id: {self.id}
         - Position: {self.title}
         - At: {self.company.name}
+
+        ## Summary
+        {self.summary or 'No summary provided'}
         
         ## Description
         {self.description or 'No description provided.'}

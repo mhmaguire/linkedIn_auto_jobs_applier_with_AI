@@ -12,6 +12,9 @@ c = Config()
 # For example, we can set the exec_lines option of the InteractiveShellApp
 # class to run some code when the IPython REPL starts
 c.InteractiveShellApp.exec_lines = [
+    'from dotenv import load_dotenv',
+    'load_dotenv()',
+    'from langchain_community.graphs import Neo4jGraph',
     'from selenium.webdriver.common.by import By',
     'from auto_resume.linked_in.linked_in import LinkedIn', 
     'from auto_resume.linked_in.job_search import JobSearchPage, JobScraper, JobPage',
@@ -20,8 +23,8 @@ c.InteractiveShellApp.exec_lines = [
     'from auto_resume.model.job import Job',
     'from auto_resume.agent import resume',
     'from auto_resume.page import init_browser',
-    'from prisma import Prisma',
-    'db = Prisma(auto_register=True)',
+    'import prisma',
+    'db = prisma.get_client()',
     'await db.connect()',
     'Files.init()',
     'config = Config.load()',
