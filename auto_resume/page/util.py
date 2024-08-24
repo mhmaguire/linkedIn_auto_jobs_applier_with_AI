@@ -1,10 +1,6 @@
 from contextlib import contextmanager
-import os
-import random
-import time
 import base64
 from pathlib import Path
-from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager

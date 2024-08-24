@@ -1,9 +1,8 @@
-import uuid
 import tempfile
+import uuid
 from pathlib import Path
 
 from auto_resume.page.util import html_to_pdf
-
 
 html_template = """
 <!DOCTYPE html>

@@ -1,12 +1,8 @@
 from typing import ClassVar
-from prisma.partials import JobWithCompany as JobBase
 
-from dataclasses import dataclass
-
-from auto_resume.agent.summarize import SummarizeJob as SummaryFactory
 from auto_resume.agent.resume import ResumeReviewer as ResumeFactory
-
-from pprint import pprint
+from auto_resume.agent.summarize import SummarizeJob as SummaryFactory
+from prisma.partials import JobWithCompany as JobBase
 
 
 class Job(JobBase):
@@ -64,7 +60,6 @@ class Job(JobBase):
                 }
             }
 
-        pprint(payload)
         return await cls.prisma().upsert(
             where={"external_id": job_id},
             data={"create": {"external_id": job_id, **payload}, "update": payload},

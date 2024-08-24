@@ -1,12 +1,12 @@
-from pathlib import Path
-from enum import Enum, IntEnum, StrEnum, auto
-from typing import List, Literal
-from typing_extensions import Annotated
 import re
+from enum import StrEnum
+from pathlib import Path
+from typing import List, Literal
 
-from pydantic import BaseModel, ConfigDict, AfterValidator, Field, create_model
-from pydantic.alias_generators import to_camel
 import yaml
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, create_model
+from pydantic.alias_generators import to_camel
+from typing_extensions import Annotated
 
 
 class Files:

@@ -1,8 +1,8 @@
-from contextlib import asynccontextmanager
-from auto_resume.model.config import Config, Files
-
-from prisma import Prisma
 import asyncio
+from contextlib import asynccontextmanager
+
+from auto_resume.model.config import Config, Files
+from prisma import Prisma
 
 
 class AppContext:
