@@ -1,0 +1,10 @@
+{
+  "name": "auto_resume",
+  "packageManager": "yarn@3.5.0",
+  "devDependencies": {
+    "vite": "^5.4.2"
+  },
+  "dependencies": {
+    "socketio": "^1.0.0"
+  }
+}
