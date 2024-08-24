@@ -50,16 +50,16 @@ def init_browser(headless=False):
     driver = webdriver.Chrome(service=service, options=options)
     return driver
 
+
 @contextmanager
 def browser(**kwargs):
     try:
-        print('entering browser')
+        print("entering browser")
         browser = init_browser(**kwargs)
         yield browser
     finally:
-        print('leaving browser')
+        print("leaving browser")
         # browser.close()
-    
 
 
 def local_file(path: Path):
@@ -72,7 +72,6 @@ def html_to_pdf(path: Path, timeout=2):
         raise FileNotFoundError(f"The specified file does not exist: {path}")
 
     with browser(headless=True) as driver:
-    
         driver.get(local_file(path))
 
         try:
@@ -100,40 +99,3 @@ def html_to_pdf(path: Path, timeout=2):
             )
 
             return base64.b64decode(pdf_base64["data"])
-
-
-def is_scrollable(element):
-    scroll_height = element.get_attribute("scrollHeight")
-    client_height = element.get_attribute("clientHeight")
-    return int(scroll_height) > int(client_height)
-
-
-def scroll_slow(driver, scrollable_element, start=0, end=3600, step=100, reverse=False):
-    if reverse:
-        start, end = end, start
-        step = -step
-    if step == 0:
-        raise ValueError("Step cannot be zero.")
-    script_scroll_to = "arguments[0].scrollTop = arguments[1];"
-    try:
-        if scrollable_element.is_displayed():
-            if not is_scrollable(scrollable_element):
-                print("The element is not scrollable.")
-                return
-            if (step > 0 and start >= end) or (step < 0 and start <= end):
-                print("No scrolling will occur due to incorrect start/end values.")
-                return
-            for position in range(start, end, step):
-                try:
-                    driver.execute_script(
-                        script_scroll_to, scrollable_element, position
-                    )
-                except Exception as e:
-                    print(f"Error during scrolling: {e}")
-                time.sleep(random.uniform(1.0, 2.6))
-            driver.execute_script(script_scroll_to, scrollable_element, end)
-            time.sleep(1)
-        else:
-            print("The element is not visible.")
-    except Exception as e:
-        print(f"Exception occurred: {e}")
