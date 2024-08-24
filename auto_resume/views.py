@@ -1,15 +1,15 @@
 from contextlib import asynccontextmanager
-from flask import render_template, g
 
-from auto_resume import app
+from flask import g, render_template
 
 import prisma
+from auto_resume import app
+from auto_resume.model.config import Files
 from auto_resume.model.job import Job
 from auto_resume.model.resume import MasterResume, Resume
-from auto_resume.model.config import Files
-
 
 prisma.register(prisma.Prisma())
+
 
 def get_resume():
     if "resume" not in g:
@@ -30,6 +30,7 @@ async def get_db():
 
 @app.route("/")
 def root():
+    print('ROOT')
     resume = get_resume()
     return render_template("index.html.j2", resume=resume)
 
@@ -88,4 +89,3 @@ async def cover_letter(resume_id):
         resume = await Resume.cover_letter(resume_id)
 
     return render_template("resume.html.j2", resume=resume)
-

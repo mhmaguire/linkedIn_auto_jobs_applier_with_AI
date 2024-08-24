@@ -2,8 +2,10 @@ from flask import Flask
 from flask_socketio import SocketIO
 
 app = Flask(__name__)
-socket = SocketIO(app)
+socketio = SocketIO(app)
 
 # ruff: noqa
-import auto_resume.vite_proxy
-import auto_resume.views 
+import auto_resume.vite
+import auto_resume.md_ext
+import auto_resume.views
+import auto_resume.socket

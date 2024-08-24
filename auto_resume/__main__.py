@@ -36,8 +36,10 @@ def fetch():
 
 
 @main.command()
-def summary():
-    print("summary")
+def serve():
+    from auto_resume import app, socketio
+
+    socketio.run(app, debug=True)
 
 
 if __name__ == "__main__":

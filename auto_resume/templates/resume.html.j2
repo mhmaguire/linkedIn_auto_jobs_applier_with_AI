@@ -6,17 +6,16 @@
 
 <header class="subheader">
     <nav class="ctx-nav">
-        <a href="{{url_for('jobs')}}"> <- Jobs Index </a>
         <a href="{{url_for('job', job_id=resume.job.id)}}"> <- Back to Job </a>
     </nav>
 </header>
 
-<div class="resume">
+<div class="resume flex flex-col flex-nowrap divide-y-2 divide-slate-500">
 
     {% with %}
         {% set job = resume.job%}
 
-        <div class="resume--header job--peek">
+        <div class="resume--header job--peek pt-4 flex flex-row flex-nowrap items-baseline gap-4">
             <div class="company--link">
                 <a href="{{job.company.link}}"> 
                     {{ job.company.name }} 
@@ -31,22 +30,21 @@
             
         </div>
 
-    {% endwith %}
-
-
-    
-    
+    {% endwith %}    
 
     <div class="resume--cover-letter">
     <form id="resume_action" name="resume_action" style="display: none;"> </form>
-        <h2>Cover Letter</h2>
+        <h2 class="text-xl">Cover Letter</h2>
         <p>
             {% if resume.cover_letters %}
                 {% for cover_letter in resume.cover_letters %}
-                    {% markdown %}
-                    {{ cover_letter.content }}
-                    {% endmarkdown %}
+                    <div class="prose">
+                        {% markdown %}
+                        {{ cover_letter.content }}
+                        {% endmarkdown %}
+                    </div>
                 {% endfor %}
+                
             {% else %}
                 <em>No cover letter available for this resume.</em>
                 <button 
@@ -61,11 +59,13 @@
     </div>
 
     <div class="resume--summary">
-        <p>
-            {% markdown %}
-            {{ resume.content }}
-            {% endmarkdown %}
-        </p>
+        <div class="prose">
+            <p>
+                {% markdown %}
+                {{ resume.content }}
+                {% endmarkdown %}
+            </p>
+        </div>
     </div>
 
     {#<div class="resume--skills">

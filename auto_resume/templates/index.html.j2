@@ -1,12 +1,21 @@
 {% extends 'layout.html.j2'%}
 
-{% endblock%}
-
 {% block title %} Matt's Auto Resume -- Home {% endblock %}
 
 
 {% block content %}
-<div class="resume">
+
+<nav class="ctx-nav">
+    <a href="{{url_for('jobs')}}"> <- Jobs Index </a>
+    
+    <form id="job_action" name="job_action" style="display: none;"> </form>
+
+
+    <button form="job_action" formmethod="post" formaction="{{url_for('task', task_name='summarize')}}"> Summarize </button>
+    <button form="job_action" formmethod="post" formaction="{{url_for('task', task_name='resume')}}"> Resume </button>
+</nav>
+
+<div class="resume prose">
     {% markdown %} {% include 'master_resume.md.j2' %} {% endmarkdown %}
 </div>
 {% endblock %}

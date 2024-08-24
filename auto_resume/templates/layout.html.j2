@@ -4,20 +4,18 @@
     {% block head %}
     <title>{% block title %}{% endblock %}</title>
     {% endblock %}
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-    <script type="module" src="/index.js"></script>
+    {{ vite_tags() }}
 </head>
-<body>
-    <header>
-    <nav class="top-nav">
-    {% block nav %}
-        <a href="{{url_for('root')}}"> master resume </a> 
-        <a href="{{url_for('jobs')}}"> jobs </a>
-    {% endblock%}
-    </nav>
+<body class="flex flex-col flex-nowrap container mx-auto">
+    <header class="max-w-[1280px] py-4">
+        <nav class="top-nav flex flex-row flex-nowrap gap-8 mb-4">
+        {% block nav %}
+            <a href="{{url_for('root')}}"> master resume </a> 
+            <a href="{{url_for('jobs')}}"> jobs </a>
+        {% endblock%}
+        </nav>
     </header>
-    <main id="content">
+    <main id="content" class="max-w-[1280px] mx-auto">
         {% block content %}
         {% endblock %}
     </main>

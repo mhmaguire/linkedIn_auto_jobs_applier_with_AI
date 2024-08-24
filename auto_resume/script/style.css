@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+
+    a {
+        @apply hover:underline;
+    }
+
+    button {
+        @apply border-2 border-slate-500 m-1 px-2 py-1;
+    }
+
+    .resume {
+        & > div {
+            @apply py-4;
+        }
+    }
+
+    .job {
+        & > div {
+            @apply py-4;
+        }
+    }
+}
+

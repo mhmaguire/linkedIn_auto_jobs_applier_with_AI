@@ -32,8 +32,6 @@ class MarkdownExt(Extension):
 
 @app.template_filter("md")
 def mkdn(s):
-    print("MARKDOWN", s)
-
     return Markdown().convert(s)
 
 

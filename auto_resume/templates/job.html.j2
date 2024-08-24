@@ -4,29 +4,27 @@
 
 {% block content %}
 
-<header class="subheader">
-    <nav class="ctx-nav">
-        <a href="{{url_for('jobs')}}"> <- Jobs Index </a>
-        
+<header class="subheader my-4">
+    <nav class="ctx-nav flex flex-row flex-nowrap gap-4 items-baseline">
         <form id="job_action" name="job_action" style="display: none;"> </form>
-
-
         <button form="job_action" formmethod="post" formaction="{{url_for('summarize', job_id=job.id)}}"> Summarize </button>
         <button form="job_action" formmethod="post" formaction="{{url_for('resume', job_id=job.id)}}"> Resume </button>
     </nav>
 </header>
 
 
-<div class="job">
-    <div class="job--title">
-        <a href="{{job.link}}"> {{job.title}} </a>
+<div class="job pt-4 flex flex-col flex-nowrap divide-y divide-slate-500">
+    <div class="flex flex-row flex-nowrap gap-8 items-baseline">
+        <div class="job--title text-xl">
+            <a href="{{job.link}}"> {{job.title}} </a>
+        </div>
+
+        <div class="job--company company--link"> 
+            <a href="{{job.company.link}}"> {{job.company.name}} </a>
+        </div>
     </div>
 
-    <div class="job--company company--link"> 
-        <a href="{{job.company.link}}"> {{job.company.name}} </a>
-    </div>
-
-        <div class="job--resumes">
+    <div class="job--resumes">
         <h3> Resumes </h3>
         {% if job.resumes %}
             <ul>
@@ -41,18 +39,21 @@
         {% endif %}
     </div>
 
-    <div class="job--commpany company"> 
+    <div class="job--summary">
+        <h3> Summary </h3>
+        <div class="prose">
+        {% if job.summary %}
+            {{job.summary|md}}
+        {% endif %}
+        </div>
+    </div>
+
+    <div class="job--commpany company">
+        <h3> Company Description </h3>
         {% if job.company.description %}
             <p class="company--desc"> {{job.company.description}} </p>
         {% else %}
             <p> No Description </p>
-        {% endif %}
-    </div>
-
-    <div class="job--summary">
-        <h3> Summary </h3>
-        {% if job.summary %}
-            {{job.summary|md}}
         {% endif %}
     </div>
 
