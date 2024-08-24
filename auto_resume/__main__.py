@@ -1,9 +1,7 @@
 from multiprocessing import Process
 import asyncio
 import click
-from flask.cli import FlaskGroup
 from auto_resume.linked_in.linked_in import LinkedIn
-from auto_resume.model.config import Config
 
 from auto_resume.task import Task, FetchJobs, IndexJobs
 from auto_resume.model.context import app
