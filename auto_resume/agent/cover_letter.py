@@ -8,10 +8,10 @@ class CoverLetterFactory:
     coordinate constructing a cover letter by calling GPT
     """
 
-    def __init__(self, prompt=None) -> None:
+    def __init__(self, prompt=None, temperature=0.7) -> None:
         prompt = COVER_LETTER_PROMPT if prompt is None else prompt
 
-        self.llm = ChatOpenAI(model="gpt-4o")
+        self.llm = ChatOpenAI(model="gpt-4o", temperature=temperature)
         self.prompt = ChatPromptTemplate.from_template(prompt)
         self.chain = self.prompt | self.llm | StrOutputParser()
 

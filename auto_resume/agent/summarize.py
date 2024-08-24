@@ -4,8 +4,8 @@ from langchain_openai import ChatOpenAI
 
 
 class SummarizeJob:
-    def __init__(self) -> None:
-        self.llm = ChatOpenAI(model="gpt-4o-mini")
+    def __init__(self, temperature=0) -> None:
+        self.llm = ChatOpenAI(model="gpt-4o-mini", temperature=temperature)
         self.chain = (
             ChatPromptTemplate.from_template(SUMMARIZE_PROMPT)
             | self.llm

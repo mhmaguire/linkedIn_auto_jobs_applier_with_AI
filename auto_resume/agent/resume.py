@@ -13,8 +13,8 @@ load_dotenv()
 
 
 class ResumeReviewer:
-    def __init__(self, model="gpt-4o-mini") -> None:
-        self.llm = ChatOpenAI(model=model)
+    def __init__(self, model="gpt-4o-mini", temperature=0.3) -> None:
+        self.llm = ChatOpenAI(model=model, temperature=temperature)
 
         self.resume_markdown_chain = (
             ChatPromptTemplate.from_template(RESUME_TEMPLATE)
