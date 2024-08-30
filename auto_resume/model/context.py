@@ -1,36 +1,41 @@
-import asyncio
-from contextlib import asynccontextmanager
+from contextlib import contextmanager
 
+from langchain_community.graphs import Neo4jGraph
+
+import auto_resume.model as model
+import prisma
 from auto_resume.model.config import Config, Files
-from prisma import Prisma
+from auto_resume.page.util import init_browser
 
 
 class AppContext:
     def __init__(self) -> None:
-        self.config = None
-        self.db = Prisma(auto_register=True)
-
-    async def asetup(self):
         Files.init()
-        self.config = Config.load()
-        self.db.connect()
+        self.config = None
+        self.db = prisma.get_client()
+        self.model = model
+        self.driver = None
+        self.graph = Neo4jGraph()
+
+    def browser(self):
+        if self.driver is None:
+            self.driver = init_browser()
+
         return self
 
     def setup(self):
-        return asyncio.run(self.asetup())
+        self.config = Config.load()
+        if not self.db.is_connected():
+            self.db.connect()
 
-    async def ateardown(self):
-        self.db.disconnect()
+        return self
 
     def teardown(self):
-        asyncio.run(self.ateardown())
-        
+        if self.db.is_connected():
+            self.db.disconnect()
 
-    async def __aenter__(self):
-        return await self.asetup()
-
-    async def __aexit__(self):
-        await self.ateardown()
+        if self.driver:
+            self.driver.quit()
 
     def __enter__(self):
         return self.setup()
@@ -38,10 +43,11 @@ class AppContext:
     def __exit__(self):
         self.teardown()
 
-@asynccontextmanager
-async def app():
+
+@contextmanager
+def app():
     ctx = AppContext()
     try:
-        yield await ctx.__aenter__()
+        yield ctx.__enter__()
     finally:
-        await ctx.__aexit__()
+        ctx.__exit__()

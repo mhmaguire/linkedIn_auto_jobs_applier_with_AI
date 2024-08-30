@@ -1,0 +1,15 @@
+.editorconfig
+.env
+.env.example
+.gitattributes
+.pnp.cjs
+.pnp.loader.mjs
+pyproject.toml
+yarn.lock
+package.lock
+postcss.config.js
+requirements.txt
+tailwind.config.js
+vite.config.js
+resume_template
+data_folder_example
