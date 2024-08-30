@@ -1,14 +1,15 @@
-import '@/style.css'
-import 'vite/modulepreload-polyfill'
-import { io } from 'socket.io-client'
+import './socket.js'
 
-const socket = io({transports: ['websocket', 'polling']})
+import router from './router.js'
 
-socket.on('connect', () => {
-  console.log('connected socket io!')
-  socket.emit('message', {data: 'connected'})
-})
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-socket.on('progress', (data) => {
-  console.log(data)
-})
+import App from './App.vue'
+
+const pinia = createPinia()
+
+createApp(App)
+  .use(router)
+  .use(pinia)
+  .mount('#app')

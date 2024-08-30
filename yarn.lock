@@ -575,6 +575,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vue/devtools-api@npm:^6.6.3":
+  version: 6.6.3
+  resolution: "@vue/devtools-api@npm:6.6.3"
+  checksum: 4dc7e980bc50557b128655ca447d2f10ccda896a88d0560eec2c391a8b97ddb63547d79d30d76a6e9e2ec5368ee73c4a66bc44367cc607c0262c328fe648de8a
+  languageName: node
+  linkType: hard
+
 "@vue/reactivity@npm:3.4.38":
   version: 3.4.38
   resolution: "@vue/reactivity@npm:3.4.38"
@@ -725,6 +732,7 @@ __metadata:
     "@tailwindcss/typography": ^0.5.14
     "@vitejs/plugin-vue": ^5.1.2
     autoprefixer: ^10.4.20
+    pinia: ^2.2.2
     postcss: ^8.4.41
     postcss-import: ^16.1.0
     socket.io: ^4.7.5
@@ -732,6 +740,7 @@ __metadata:
     tailwindcss: ^3.4.10
     vite: ^5.4.2
     vue: ^3.4.38
+    vue-router: ^4.4.3
   languageName: unknown
   linkType: soft
 
@@ -1846,6 +1855,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pinia@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "pinia@npm:2.2.2"
+  dependencies:
+    "@vue/devtools-api": ^6.6.3
+    vue-demi: ^0.14.10
+  peerDependencies:
+    "@vue/composition-api": ^1.4.0
+    typescript: ">=4.4.4"
+    vue: ^2.6.14 || ^3.3.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+    typescript:
+      optional: true
+  checksum: 87da2d803edc181a46de14513aae2a252b0218561113ce3d970ffb90f4768d12f3526369ed5a457fe8a1f93f8a16aaf691e624f5a54e54101110c30b424698c9
+  languageName: node
+  linkType: hard
+
 "pirates@npm:^4.0.1":
   version: 4.0.6
   resolution: "pirates@npm:4.0.6"
@@ -2494,6 +2522,33 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 7d25c1b2366ae4d9eb515ba9efc2619c544ec6d806d636977fac93f59cdf63e22ea9b4592c69c496a313cf95c88e374c81870d4bb4b11f401ec003793dfd2830
+  languageName: node
+  linkType: hard
+
+"vue-demi@npm:^0.14.10":
+  version: 0.14.10
+  resolution: "vue-demi@npm:0.14.10"
+  peerDependencies:
+    "@vue/composition-api": ^1.0.0-rc.1
+    vue: ^3.0.0-0 || ^2.6.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+  bin:
+    vue-demi-fix: bin/vue-demi-fix.js
+    vue-demi-switch: bin/vue-demi-switch.js
+  checksum: 9b4106f99be3b0c1dd4a6dc5725f5e8f79c6b98d1eeb849bf2c54416cd77f4aa344960b202768865245cfa82d57f49a9d96f67f5d8e256604b9dac1c5df9a8d6
+  languageName: node
+  linkType: hard
+
+"vue-router@npm:^4.4.3":
+  version: 4.4.3
+  resolution: "vue-router@npm:4.4.3"
+  dependencies:
+    "@vue/devtools-api": ^6.6.3
+  peerDependencies:
+    vue: ^3.2.0
+  checksum: b1eaa94f8048fc84190cf7ebf5e6fad1e157ef6f41caabb425355730e77092904e715d02b026b96972457f9d4ace2b18e86de85142e269230c8ac71e3a17005e
   languageName: node
   linkType: hard
 

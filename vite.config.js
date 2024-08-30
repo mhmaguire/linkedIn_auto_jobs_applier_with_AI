@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import vue from '@vitejs/plugin-vue'
 
 /** @type {import('vite').UserConfig} */
 export default {
@@ -8,6 +9,9 @@ export default {
     port: 5173,
     strictPort: true,
   },
+  plugins: [
+    vue()
+  ],
   build: {
     manifest: true,
     rollupOptions: {
