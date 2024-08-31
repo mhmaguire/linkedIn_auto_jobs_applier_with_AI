@@ -33,14 +33,13 @@ class ResumeReviewer:
                 "job_description": itemgetter("job_description"),
             }
             | self.fusion_job_description_resume_chain
-            | StrOutputParser()
         )
 
     def __call__(self, resume: MasterResume, job):
         try:
-            output = self.chain.invoke(
+            output = self.chain.with_config({"run_name": self.__class__.__name__}).invoke(
                 {"resume": resume, "job_description": job.summary}
-            ).with_config({"run_name": self.__class__.__name__})
+            )
 
             return output
         except Exception as e:

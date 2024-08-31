@@ -1,14 +1,19 @@
-from flask import render_template
+from flask import jsonify, render_template
 
 from auto_resume import app
-from auto_resume.model.config import Files
-from auto_resume.model.resume import MasterResume
 
 
-@app.route("/")
-def root():
-    print('ROOT')
-    resume = MasterResume.load(Files.plain_text_resume_file)
-    return render_template("index.html.j2", resume=resume)
+@app.errorhandler(404)
+def not_found(e):
+    return jsonify(error=str(e)), 404
 
 
+@app.route("/heartbeat")
+def heartbeat():
+    return jsonify({"status": "healthy"})
+
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def catch_all(path):
+    return render_template("index.html.j2")

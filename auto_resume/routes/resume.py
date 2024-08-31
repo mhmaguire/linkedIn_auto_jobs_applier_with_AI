@@ -1,42 +1,31 @@
-from flask import render_template, send_file
+from flask import send_file, abort
 
 from auto_resume import app
 from auto_resume.model.resume import Resume
 
 
-@app.route("/jobs/<job_id>/resumes/<resume_id>")
-def show_resume(job_id, resume_id):
-    # async with get_db():
-    resume = Resume.prisma().find_unique(
-        where={"id": resume_id, "job_id": job_id},
-        include={"job": {"include": {"company": True}}},
-    )
-
-    if not resume:
-        return "Resume not found", 404
-
-    return render_template("resume.html.j2", resume=resume)
-
-
-@app.post("/resumes/<resume_id>/pdf")
-def resume_pdf(resume_id):
-    # async with get_db():
+def get_resume(resume_id):
     resume = Resume.prisma().find_unique(
         where={"id": resume_id},
         include={"job": {"include": {"company": True}}},
     )
 
     if not resume:
-        return "Resume not found", 404
+        abort(404, description="Resume not found")
 
-    pdf_path = resume.to_pdf()
-
-    return send_file(pdf_path, as_attachment=True)
+    return resume
 
 
-@app.post("/resume/<resume_id>/cover_letter")
+@app.route("/api/resumes/<resume_id>")
+def show_resume(resume_id):
+    return {"resume": get_resume(resume_id).model_dump()}
+
+
+@app.post("/api/resumes/<resume_id>/pdf")
+def resume_pdf(resume_id):
+    return send_file(get_resume(resume_id).to_pdf(), as_attachment=True)
+
+
+@app.post("/api/resume/<resume_id>/cover_letter")
 def cover_letter(resume_id):
-    # async with get_db():
-    resume = Resume.cover_letter(resume_id)
-
-    return render_template("resume.html.j2", resume=resume)
+    return {"resume": get_resume(resume_id).cover_letter(resume_id)}

@@ -47,22 +47,20 @@ def vite_static(
         return send_from_directory(dist, filename, max_age=ONE_YEAR)
 
 def _get_root() -> Path:
-    return Path.cwd() / "vite"
+    return Path.cwd() / "script"
 
 
 @app.template_global(name="vite_tags")
 def make_tag(*, static: bool = False):
-    # if static or not current_app.debug:
-    #     tag = make_static_tag()
-    # else:
-    tag = make_debug_tag()
+    if static or not current_app.debug:
+        tag = make_static_tag()
+    else:
+        tag = make_debug_tag()
+
     return Markup(tag)
 
 
 def make_static_tag():
-    # js_file = Path(glob.glob("vite/dist/assets/*.js")[0]).name
-    # css_file = Path(glob.glob("vite/dist/assets/*.css")[0]).name
-
     js_file_url = url_for("vite_static", filename='index.js')
     css_file_url = url_for("vite_static", filename='style.css')
 
@@ -76,6 +74,7 @@ def make_static_tag():
 
 
 def make_debug_tag():
+    
     return dedent(
         f"""
             <!-- FLASK_VITE_HEADER -->

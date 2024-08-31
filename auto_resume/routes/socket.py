@@ -21,7 +21,7 @@ class Task:
         cls(task_name).perform()
         
 
-@app.route('/tasks/<task_name>', methods=['POST'])
+@app.route('/api/tasks/<task_name>', methods=['POST'])
 def task(task_name):
     print('task', task_name)
 

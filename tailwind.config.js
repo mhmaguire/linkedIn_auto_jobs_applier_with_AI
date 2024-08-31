@@ -2,6 +2,7 @@
 export default {
   content: [
     "./auto_resume/**/*.html.j2",
+    './auto_resume/script/**/*.{vue,js}'
   ],
   theme: {
     extend: {},

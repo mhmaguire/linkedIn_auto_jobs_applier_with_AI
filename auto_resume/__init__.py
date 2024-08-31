@@ -25,7 +25,7 @@ socketio = SocketIO(app)
 # ruff: noqa
 import auto_resume.routes.vite
 import auto_resume.routes.md_ext
-import auto_resume.routes.index
 import auto_resume.routes.job
 import auto_resume.routes.resume
 import auto_resume.routes.socket
+import auto_resume.routes.index

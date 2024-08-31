@@ -9,7 +9,6 @@ asgiref==3.8.1
 asn1crypto==1.5.1
 asttokens==2.4.1
 attrs==24.2.0
--e git+ssh://git@github.com/mhmaguire/linkedIn_auto_jobs_applier_with_AI.git@2b21193a1f0ceef5665dcf49d0ab942961df1f68#egg=auto_resume
 bidict==0.23.1
 blinker==1.8.2
 certifi==2024.7.4
@@ -21,6 +20,7 @@ cryptography==43.0.0
 cssselect2==0.7.0
 dataclasses-json==0.6.7
 decorator==5.1.1
+devtools==0.12.2
 distro==1.9.0
 executing==2.0.1
 feedparser==6.0.11

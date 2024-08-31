@@ -3,14 +3,18 @@
   "packageManager": "yarn@3.5.0",
   "type": "module",
   "devDependencies": {
-    "vite": "^5.4.2"
+    "execa": "^9.3.1",
+    "vite": "^5.4.2",
+    "vite-plugin-inspect": "^0.8.7"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.1.5",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.14",
     "@vitejs/plugin-vue": "^5.1.2",
+    "@vueuse/core": "^11.0.3",
     "autoprefixer": "^10.4.20",
     "pinia": "^2.2.2",
     "postcss": "^8.4.41",
@@ -19,6 +23,8 @@
     "socket.io-client": "^4.7.5",
     "tailwindcss": "^3.4.10",
     "vue": "^3.4.38",
-    "vue-router": "^4.4.3"
+    "vue-markdown-render": "^2.2.1",
+    "vue-router": "^4.4.3",
+    "zod": "^3.23.8"
   }
 }

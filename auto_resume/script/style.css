@@ -4,25 +4,89 @@
 
 
 @layer components {
+    .page {
 
-    a {
-        @apply hover:underline;
+        @apply ml-16;
+
+        &--header {
+            @apply text-4xl font-semibold leading-10 mb-8;
+        }
+
+        &--body {
+            
+        }
     }
+}
+
+
+@layer components {
+
+    /* link style */
+    a.link {
+        @apply flex flex-row flex-nowrap gap-2 items-center;
+
+        .link--icon {
+            @apply w-4 h-4;
+        }
+
+        .link--text {
+            @apply text-nowrap;
+        }
+    }
+
+    /* end link style */
+}
+
+
+@layer components {
+
+    /* card style */
+    .card {
+        @apply divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow;
+
+        .card--header {
+            @apply px-4 py-5 sm:px-6;
+
+            h3 {
+                @apply text-base font-semibold leading-6 text-gray-900;
+            }
+
+        }
+
+        .card--body {
+            @apply px-4 py-5 sm:p-6;
+        }
+    }
+
+    /* end card style */
+}
+
+
+@layer base {
+    /* base style */
+    /* Buttons */
 
     button {
         @apply border-2 border-slate-500 m-1 px-2 py-1;
     }
 
-    .resume {
-        & > div {
-            @apply py-4;
-        }
+    /* Links */
+
+    a {
+        @apply hover:underline;
     }
 
-    .job {
-        & > div {
-            @apply py-4;
-        }
+    /* List */
+
+    ul {
+        @apply ps-6 list-outside;
     }
+
+    /* Text */
+
+    .text {
+        @apply prose xl:prose-xl;
+    }
+
+    /* end base */
 }
-

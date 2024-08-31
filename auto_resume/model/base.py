@@ -1,6 +1,14 @@
-from pydantic import BaseModel as _BaseModel, field_validator
+from pydantic import BaseModel as _BaseModel, ConfigDict, field_validator
+from pydantic.alias_generators import to_camel
 
 class BaseModel(_BaseModel):
+
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        field_title_generator=None,
+        model_title_generator=None,
+        populate_by_name=True
+    )
 
     @field_validator("*", mode="before")
     @classmethod
