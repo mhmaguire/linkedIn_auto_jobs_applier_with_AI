@@ -21,9 +21,9 @@
 {% endfor %}
 
 ### Projects
-{% for label, project in resume.projects.items() %} 
-{{label}}
-{{project}}
+{% for project in resume.projects %} 
+{{project.name}}
+{{project.description}}
 {% endfor %}
 
 ### Availability
@@ -58,6 +58,6 @@
 {% endfor %}
 
 ### Skills
-{% for skill, exp in resume.skills.items() %} 
-{{skill}} -- {{exp}}
+{% for skill in resume.skills %} 
+{{skill.name}} -- {{skill.level}}
 {% endfor %}
