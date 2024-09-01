@@ -222,6 +222,26 @@ class Skill(BaseModel):
     )
 
 
+class Interest(BaseModel):
+    name: str = Field(..., title="Name")
+    description: str | None = Field(None, title="Description")
+
+
+class Certification(BaseModel):
+    name: str = Field(..., title="Certification Name", description="Name of the certification.")
+    issuer: str = Field(
+        ...,
+        title="Issuing Authority",
+        description="The organization that issued the certification.",
+    )
+    description: str = Field(
+        ..., title="Certification Description", description="Description of the certification."
+    )
+    date_obtained: str = Field(
+        ..., title="Date Obtained", description="The date when the certification was obtained."
+    )
+
+
 class MasterResume(BaseModel):
     personal_information: PersonalInformation = Field(
         ..., title="Personal Information", description="Your personal details."
@@ -235,14 +255,14 @@ class MasterResume(BaseModel):
     work_preferences: WorkPreferences = Field(
         ..., title="Work Preferences", description="Your preferences related to work arrangements."
     )
-    projects: List[Project] = Field(
-        ..., title="Projects", description="List of projects you have undertaken."
+    salary_expectations: SalaryExpectations = Field(
+        ..., title="Salary Expectations", description="Your expected salary range."
     )
     availability: Availability = Field(
         ..., title="Availability", description="Your availability details for starting a new job."
     )
-    salary_expectations: SalaryExpectations = Field(
-        ..., title="Salary Expectations", description="Your expected salary range."
+    projects: List[Project] = Field(
+        ..., title="Projects", description="List of projects you have undertaken."
     )
     education_details: List[Education] = Field(
         ...,
@@ -256,7 +276,7 @@ class MasterResume(BaseModel):
         title="Experience",
         description="List of your professional experiences.",
     )
-    certifications: List[str] = Field(
+    certifications: List[Certification] = Field(
         ...,
         default_factory=list,
         title="Certifications",
@@ -268,7 +288,7 @@ class MasterResume(BaseModel):
         title="Languages",
         description="List of languages you know and your proficiency levels.",
     )
-    interests: List[str] = Field(
+    interests: List[Interest] = Field(
         ...,
         default_factory=list,
         title="Interests",
@@ -286,6 +306,13 @@ class MasterResume(BaseModel):
             raise FileNotFoundError
 
         return cls(**yaml.safe_load(plain_txt_resume.read_text()))
+
+
+    @classmethod
+    def update(cls, data, plain_txt_resume: Path = Files.plain_text_resume_file):
+
+        model = cls.model_validate(data)
+        plain_txt_resume.write_text(yaml.safe_dump(model.model_dump()))
 
     def __str__(self):
         return Template(self.template.read_text()).render(resume=self)

@@ -61,10 +61,14 @@ def schema():
     def get_members() -> Tuple[str, BaseModel]:
         return inspect.getmembers(model, lambda x: isclass(x) and issubclass(x, BaseModel))
 
+    print("""
+    import { useModel } from '@/composable/schema'
+    """)
+
     print(
         "\n\n".join(
             [
-                f"export const {name} = JSON.parse(`{json.dumps(member.model_json_schema(by_alias=True))}`)"
+                f"export const {name} = useModel(JSON.parse(`{json.dumps(member.model_json_schema(by_alias=True))}`))"
                 for (name, member) in get_members()
             ]
         )
