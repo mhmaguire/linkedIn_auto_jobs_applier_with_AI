@@ -6,6 +6,7 @@
     <nav>
       <router-link to="/">Master Resume</router-link>
       <router-link to="/jobs">Jobs</router-link>
+      <router-link to="/search/parameters">Search Params</router-link>
       <!-- <router-link to="/resume">Resume</router-link>
       <router-link to="/cover-letter">Cover Letter</router-link> -->
     </nav>

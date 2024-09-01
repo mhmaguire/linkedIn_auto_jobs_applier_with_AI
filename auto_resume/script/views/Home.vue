@@ -21,10 +21,14 @@ onMounted(async () => {
 })
 
 const submitResume = () => {
-  const { success, data } = resume.validator.safeParse(toValue(resume.data))
-  console.log('SUBMIT', resume.isValid())
+  const { success, data, ...rest } = resume.isValid()
 
-  resume.update()
+  if (success) {
+    return useFetch('/api/resume/master').put(resume.data).json()
+  } else {
+    print(success, rest)
+    return {success, ...rest}
+  }
 }
 
 </script>
@@ -75,43 +79,5 @@ const submitResume = () => {
 </form>
 
 </template>
-
-<!-- <template>
-  <div>
-    <pre> {{ data }} </pre>
-    <form v-if="masterResumeSchema.properties">
-      <fieldset v-for="{ title, description, type, ...property }, key of masterResumeSchema.properties">
-        <legend class="text-xl">{{ title }}</legend>
-        <span class="text-lg">{{ description }}</span>
-
-        <template v-if="type == 'object'">
-          <div v-for="(prop, name) of property.properties">
-            <label :for="name"> {{ prop.title }} </label>
-            <legend> {{ prop.description }} </legend>
-            <input :id="name" :name="name" type="text" v-model="data[key][name]">
-          </div>
-        </template>
-
-
-        <template v-if="type == 'array'">
-          <div> 
-            <button @click.prevent="data[key].push({})"> Add Item </button>
-
-            <div v-for="item, i in data[key]">
-              <button @click.prevent="data[key].splice(i)"> Remove Item </button>
-
-              <div v-for="(prop, name) of property.items.properties">
-                <label :for="name"> {{ prop.title }} </label>
-                <legend> {{ prop.description }} </legend>
-                <input :id="name" :name="name" type="text" v-model="item[name]">
-              </div>
-
-            </div>
-          </div>
-        </template>
-      </fieldset>
-    </form>
-  </div>
-</template> -->
 
 <style scoped></style>

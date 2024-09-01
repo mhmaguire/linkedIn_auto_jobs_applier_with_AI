@@ -53,16 +53,22 @@ def serve():
 def schema():
     import inspect
     from inspect import isclass
-    import auto_resume.model.resume as model
+    import auto_resume.model.resume as resume
+    from auto_resume.model.config import Parameters
+    
     from auto_resume.model.base import BaseModel
     import json
     from typing import Tuple
 
     def get_members() -> Tuple[str, BaseModel]:
-        return inspect.getmembers(model, lambda x: isclass(x) and issubclass(x, BaseModel))
+        return inspect.getmembers(resume, lambda x: isclass(x) and issubclass(x, BaseModel))
 
     print("""
     import { useModel } from '@/composable/schema'
+    """)
+
+    print(f"""
+    export const Parameters = useModel(JSON.parse(`{json.dumps(Parameters.model_json_schema(by_alias=True))}`))
     """)
 
     print(

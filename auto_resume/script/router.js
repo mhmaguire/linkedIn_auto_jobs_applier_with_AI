@@ -11,6 +11,10 @@ export default createRouter({
       ]
 
     },
+    { 
+      path: '/search/parameters',
+      component: () => import('./views/Search.vue')
+    },
     { path: '/resumes/:id', component: () => import('./views/Resume.vue') },
     { path: '/cover-letter', component: () => import('./views/CoverLetter.vue') },
   ]

@@ -16,20 +16,16 @@ export const useModel = (model) => {
       return validator.safeParse(toValue(data))
     }
 
-    const update = () => {
-      const { success, data } = isValid()
-
-      if (success) {
-        return useFetch('/api/resumes/master').put(data).json()
-      }
+    const getField = (name) => {
+      return schema.properties[name]
     }
 
     return {
       schema,
       validator,
       data,
-      update,
-      isValid
+      isValid,
+      getField
     }
   })
 }
