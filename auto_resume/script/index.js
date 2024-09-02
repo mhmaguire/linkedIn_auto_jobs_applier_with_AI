@@ -1,7 +1,5 @@
 import '@/style.css'
 
-import './socket.js'
-
 import router from './router.js'
 
 import { createApp } from 'vue'

@@ -1,4 +1,9 @@
 <script setup>
+  import { useWs } from './store/socket';
+  const socket = useWs()
+
+  socket.bind()
+
 </script>
 
 <template>
@@ -6,7 +11,7 @@
     <nav>
       <router-link to="/">Master Resume</router-link>
       <router-link to="/jobs">Jobs</router-link>
-      <router-link to="/search/parameters">Search Params</router-link>
+      <router-link to="/search/detail">Search</router-link>
       <!-- <router-link to="/resume">Resume</router-link>
       <router-link to="/cover-letter">Cover Letter</router-link> -->
     </nav>
@@ -16,7 +21,7 @@
 
 <style scoped>
 nav {
-  @apply flex flex-row flex-nowrap gap-4 mt-4 mb-6 py-4;
+  @apply flex flex-row flex-nowrap gap-4 mt-4 mb-2 py-4;
 
   a {
 
@@ -30,7 +35,5 @@ nav {
       @apply border-b-2 border-cyan-500;
     }
   }
-
-
 }
 </style>

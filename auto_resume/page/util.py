@@ -55,7 +55,7 @@ def browser(**kwargs):
         yield browser
     finally:
         print("leaving browser")
-        # browser.close()
+        browser.quit()
 
 
 def local_file(path: Path):

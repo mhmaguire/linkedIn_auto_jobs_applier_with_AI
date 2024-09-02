@@ -9,11 +9,16 @@ export default createRouter({
         { path: '', component: () => import('./views/JobList.vue') },
         { path: ':id', component: () => import('./views/Job.vue') },
       ]
-
     },
     { 
-      path: '/search/parameters',
-      component: () => import('./views/Search.vue')
+      path: '/search',
+      component: () => import('./views/search/Search.vue'),
+      children: [
+        {path: '', redirect: 'detail' },
+        {path: 'detail', component: () => import('./views/search/SearchDetail.vue')},
+        {path: 'parameters', component: () => import('./views/search/SearchParams.vue')}
+      ]
+      
     },
     { path: '/resumes/:id', component: () => import('./views/Resume.vue') },
     { path: '/cover-letter', component: () => import('./views/CoverLetter.vue') },

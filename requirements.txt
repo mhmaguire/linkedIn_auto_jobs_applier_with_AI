@@ -8,6 +8,7 @@ arxiv==2.1.3
 asgiref==3.8.1
 asn1crypto==1.5.1
 asttokens==2.4.1
+async-timeout==4.0.3
 attrs==24.2.0
 bidict==0.23.1
 blinker==1.8.2
@@ -22,6 +23,7 @@ dataclasses-json==0.6.7
 decorator==5.1.1
 devtools==0.12.2
 distro==1.9.0
+dnspython==2.6.1
 executing==2.0.1
 feedparser==6.0.11
 Flask==3.0.3
@@ -99,6 +101,7 @@ pyzmq==26.1.0
 qdrant-client==1.11.0
 qrcode==7.4.2
 rapidfuzz==3.9.6
+redis==5.0.8
 regex==2024.7.24
 reportlab==4.2.2
 requests==2.32.3

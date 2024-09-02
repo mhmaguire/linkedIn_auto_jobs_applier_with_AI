@@ -2,7 +2,7 @@
   import { useFetch } from '@vueuse/core'
   import { onMounted, ref } from 'vue';
 
-  import { Parameters } from '../../model/config.py'
+  import { Parameters } from '../../../model/config.py'
   import Field from '@/components/Field.vue'
   import FieldList from '@/components/FieldList.vue'
   import {PlusIcon, XMarkIcon} from '@heroicons/vue/24/solid'

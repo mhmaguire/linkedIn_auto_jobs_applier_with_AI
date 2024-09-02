@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask
 from flask_socketio import SocketIO
 import prisma
 
@@ -16,11 +16,10 @@ app = Flask(__name__)
 
 @app.teardown_appcontext
 def teardown(_):
-    print('TEARDOWN')
     prisma.get_client().disconnect()
 
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, message_queue='redis://')
 
 # ruff: noqa
 import auto_resume.routes.vite

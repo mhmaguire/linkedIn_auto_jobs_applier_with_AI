@@ -1,42 +1,46 @@
-from time import sleep
+
+
+from flask_socketio import emit, Namespace
+
+from multiprocessing import Process, Lock
+
+from auto_resume.task.search import search
 from auto_resume import socketio, app
 
-from threading import Thread
 
+process = None
+process_lock = Lock()
 
-class Task:
-
-    def __init__(self, name) -> None:
-        self.name = name
+def worker(fn, *args, **kwargs):
+    return fn(*args, **kwargs)
     
-    def perform(self):
-        for i in range(100):
-            print(i)
-            socketio.emit('progress', {'progress': i, 'task_name': self.name})
-            sleep(1)
-            
-
-    @classmethod
-    def run(cls, task_name):
-        cls(task_name).perform()
-        
 
 @app.route('/api/tasks/<task_name>', methods=['POST'])
 def task(task_name):
-    print('task', task_name)
-
-    Thread(target=Task.run, args=(task_name, )).start()
-
-    return 'started task'
-
+    global process
     
+    with process_lock:
+        if process is None:
+            process = Process(target=worker, args=(search,))
+            process.start()
+
+    return {'task': {'name': task_name, 'status': 'running'}}, 200
 
 
-@socketio.on('connect')
-def connected():
-    print('CONNECTED')
-    
+class AutoResumeTasks(Namespace):
 
-@socketio.on('message')
-def message(data):
-    print('ON MESSAGE', data)
+    def on_connect(self):
+        emit('task_status', {    
+            'tasks': [
+                {'name': 'Task'}
+            ]
+        })
+
+    def on_task_status(self):
+        emit('task_status', {    
+            'tasks': [
+                {'name': 'Task'}
+            ]
+        })
+
+socketio.on_namespace(AutoResumeTasks('/auto_resume'))
